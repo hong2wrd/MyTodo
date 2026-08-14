@@ -19,7 +19,7 @@ public class PhoneNumber {
     @Column(name = "phone_tel1", length = 4, nullable = false)
     private String tel1;
 
-    @Column(name = "phone_tel1", length = 4, nullable = false)
+    @Column(name = "phone_tel2", length = 4, nullable = false)
     private String tel2;
 
 }

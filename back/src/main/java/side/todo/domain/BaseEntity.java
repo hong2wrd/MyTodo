@@ -13,7 +13,6 @@ public abstract class BaseEntity {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdTime;
 
-    @CreationTimestamp
     @UpdateTimestamp
     @Column(nullable = false)
     private LocalDateTime updatedTime;

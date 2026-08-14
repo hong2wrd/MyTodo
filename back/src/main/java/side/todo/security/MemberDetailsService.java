@@ -23,7 +23,7 @@ public class MemberDetailsService implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String memberId) throws UsernameNotFoundException {
-        Member findMember = memberRepository.findByUserIdAndRetired(memberId, false)
+        Member findMember = memberRepository.findByMemberIdAndRetired(memberId, false)
                 .orElseThrow(() -> new InternalAuthenticationServiceException("아이디 및 비밀번호를 확인해주세요."));
         return new MemberDetails(findMember);
     }
