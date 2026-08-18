@@ -117,7 +117,7 @@ class MemberControllerTest {
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
 
         // then
-        resultActions.andExpect(MockMvcResultMatchers.status().isBadRequest());
+        resultActions.andExpect(MockMvcResultMatchers.status().isConflict());
     }
 
     @Test
@@ -166,7 +166,7 @@ class MemberControllerTest {
         System.out.println("responseBody = " + responseBody);
 
         // then
-        resultActions.andExpect(MockMvcResultMatchers.status().isBadRequest());
+        resultActions.andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test

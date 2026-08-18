@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import side.todo.domain.Member;
 import side.todo.dto.ResponseDto;
 import side.todo.dto.member.*;
 import side.todo.security.MemberDetails;
@@ -17,6 +18,15 @@ import side.todo.service.MemberService;
 public class MemberController {
 
     private final MemberService memberService;
+
+    @GetMapping("/{memberId}")
+    public ResponseEntity<?> searchMember(@PathVariable String memberId,
+                                          @AuthenticationPrincipal MemberDetails memberDetails) {
+        Member member = memberDetails.getMember();
+        //MemberSearchRespDto searchRespDto =  memberService.searchMember(memberId, member);
+        //return new ResponseEntity(new ResponseDto<>(1, "사용자 정보를 조회했습니다.", searchRespDto), HttpStatus.OK);
+        return null;
+    }
 
     @PostMapping
     public ResponseEntity<?> joinMember(@RequestBody @Valid MemberJoinReqDto joinReqDto) {

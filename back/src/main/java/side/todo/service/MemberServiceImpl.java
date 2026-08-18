@@ -9,6 +9,7 @@ import side.todo.domain.Member;
 import side.todo.domain.PhoneNumber;
 import side.todo.dto.member.*;
 import side.todo.exception.ApiException;
+import side.todo.exception.ConflictException;
 import side.todo.repository.MemberRepository;
 
 @Service
@@ -28,7 +29,7 @@ public class MemberServiceImpl implements MemberService {
     public MemberJoinRespDto joinMember(MemberJoinReqDto joinReqDto) {
         memberRepository.findByMemberIdAndRetired(joinReqDto.getMemberId(), false)
                 .ifPresent(member -> {
-                    throw new IllegalArgumentException("중복된 아이디 입니다.");
+                    throw new ConflictException("중복된 아이디 입니다.");
                 });
 
         String encryptPassword = passwordEncoder.encode(joinReqDto.getPassword());
