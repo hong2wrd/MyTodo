@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import side.todo.domain.enums.Role;
+import side.todo.dto.join.MemberJoinReqDto;
 
 import java.util.ArrayList;import java.util.List;
 
@@ -53,5 +54,15 @@ public class Member extends BaseEntity {
                 .memberId(memberId)
                 .role(Role.valueOf(role))
                 .build();
+    }
+
+    public static Member from(MemberJoinReqDto dto, String encryptPassword) {
+        return Member.builder()
+                .memberId(dto.getMemberId())
+                .name(dto.getMemberName())
+                .password(encryptPassword)
+                .phoneNumber(new PhoneNumber(dto.getDdd(), dto.getTel1(), dto.getTel2()))
+                .build();
+
     }
 }

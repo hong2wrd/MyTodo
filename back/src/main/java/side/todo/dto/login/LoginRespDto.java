@@ -1,9 +1,11 @@
 package side.todo.dto.login;
 
 import lombok.Builder;
+import lombok.Getter;
 import side.todo.domain.Member;
 
 @Builder
+@Getter
 public class LoginRespDto {
     private String userId;
     private String name;
