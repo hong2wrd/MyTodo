@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -16,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import side.todo.dto.ResponseDto;
 import side.todo.repository.redis.RedisRefreshTokenRepository;
 import side.todo.security.MemberDetailsService;
 import side.todo.security.jwt.JwtAuthenticationFilter;
@@ -23,6 +25,8 @@ import side.todo.security.jwt.JwtAuthorizationFilter;
 import side.todo.security.jwt.JwtProperties;
 
 import java.util.List;
+
+import static side.todo.util.ResponseUtil.response;
 
 @Configuration
 @RequiredArgsConstructor
@@ -50,15 +54,12 @@ public class SecurityConfig {
 
                 .exceptionHandling(eh -> eh
                         .authenticationEntryPoint((request, response, authException) -> {
-                            // TODO response 적용
+                            response(response, new ResponseDto<>(-1, "로그인을 진해해 주세요.", null), HttpStatus.UNAUTHORIZED);
                         })
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
-                            // TODO response 적용
+                            response(response, new ResponseDto<>(-1, "권한이 없습니다.", null), HttpStatus.FORBIDDEN);
                         })
-
-
                 )
-
                 .build();
     }
 
