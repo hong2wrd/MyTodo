@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import side.todo.domain.enums.Role;
-import side.todo.dto.join.MemberJoinReqDto;
 
 import java.util.ArrayList;import java.util.List;
 
@@ -23,7 +22,7 @@ public class Member extends BaseEntity {
     @Column(name = "mem_id", nullable = false, unique = true, length = 20, updatable = false)
     private String memberId;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", nullable = false, length = 60)
     private String password;
 
     @Column(name = "mem_name")
@@ -38,7 +37,7 @@ public class Member extends BaseEntity {
     private PhoneNumber phoneNumber;
 
     @Builder.Default
-    @Column(name = "retied", nullable = false)
+    @Column(name = "retired", nullable = false)
     private boolean retired = false;
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
@@ -56,13 +55,26 @@ public class Member extends BaseEntity {
                 .build();
     }
 
-    public static Member from(MemberJoinReqDto dto, String encryptPassword) {
+    public static Member create(String memberId, String memberName, String encryptPassword, PhoneNumber phoneNumber) {
         return Member.builder()
-                .memberId(dto.getMemberId())
-                .name(dto.getMemberName())
+                .memberId(memberId)
+                .name(memberName)
                 .password(encryptPassword)
-                .phoneNumber(new PhoneNumber(dto.getDdd(), dto.getTel1(), dto.getTel2()))
+                .phoneNumber(phoneNumber)
                 .build();
-
     }
+
+    public void retire() {
+        this.retired = true;
+    }
+
+    public void update(String name, String ddd, String tel1, String tel2) {
+        this.name = name;
+        this.phoneNumber.update(ddd, tel1, tel2);
+    }
+
+    public void changePassword(String changePassword) {
+        this.password = changePassword;
+    }
+
 }

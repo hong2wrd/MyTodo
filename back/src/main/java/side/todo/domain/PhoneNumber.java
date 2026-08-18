@@ -22,4 +22,9 @@ public class PhoneNumber {
     @Column(name = "phone_tel2", length = 4, nullable = false)
     private String tel2;
 
+    public void update(String ddd, String tel1, String tel2) {
+        this.ddd = ddd;
+        this.tel1 = tel1;
+        this.tel2 = tel2;
+    }
 }
