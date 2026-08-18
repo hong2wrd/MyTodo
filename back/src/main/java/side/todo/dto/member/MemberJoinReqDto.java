@@ -1,4 +1,4 @@
-package side.todo.dto.join;
+package side.todo.dto.member;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;

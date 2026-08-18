@@ -1,12 +1,10 @@
 package side.todo.dto;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@Getter
-@RequiredArgsConstructor
-public class ResponseDto<T> {
-    private final Integer code; // 1 : 성공, -1 실패
-    private final String msg;
-    private final T data;
+/**
+ * @param code 1 : 성공, -1 실패
+ */
+public record ResponseDto<T>(Integer code, String msg, T data) {
+    public ResponseDto(Integer code, String msg) {
+        this(code, msg, null);
+    }
 }
