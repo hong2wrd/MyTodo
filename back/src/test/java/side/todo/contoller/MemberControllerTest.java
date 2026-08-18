@@ -17,10 +17,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 import side.todo.domain.Member;
 import side.todo.domain.PhoneNumber;
-import side.todo.dto.member.MemberJoinReqDto;
-import side.todo.dto.member.MemberRetireReqDto;
-import side.todo.dto.member.MemberUpdatePasswordReqDto;
-import side.todo.dto.member.MemberUpdateReqDto;
+import side.todo.dto.member.*;
 import side.todo.repository.MemberRepository;
 import tools.jackson.databind.ObjectMapper;
 
@@ -64,6 +61,23 @@ class MemberControllerTest {
         Member member = Member.create(memberJoinReqDto.getMemberId(), memberJoinReqDto.getMemberName(), encryptPassword, phoneNumber);
 
         memberRepository.save(member);
+    }
+
+    @Test
+    @DisplayName("사용자 조회")
+    @WithUserDetails(value = "test0000", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    void successSearch() throws Exception {
+        // given
+        String memberId = "test0000";
+
+        // when
+        ResultActions resultActions = mvc.perform(get("/member/" + memberId));
+
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("responseBody = " + responseBody);
+
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andExpect(jsonPath("$.data.memberName").value("testName"));
     }
 
     @Test

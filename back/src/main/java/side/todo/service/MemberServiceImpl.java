@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import side.todo.domain.Member;
 import side.todo.domain.PhoneNumber;
 import side.todo.dto.member.*;
-import side.todo.exception.ApiException;
 import side.todo.exception.ConflictException;
 import side.todo.repository.MemberRepository;
 
@@ -94,9 +93,24 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
 
         String encryptPassword = passwordEncoder.encode(updatePasswordReqDto.getChangePassword());
-        System.out.println(encryptPassword);
-        System.out.println("encryptPassword.length() = " + encryptPassword.length());
         findMember.changePassword(encryptPassword);
+    }
 
+    @Override
+    public MemberSearchRespDto searchMember(String memberId, Member member) {
+        if(!memberId.equals(member.getMemberId())) {
+            throw new IllegalArgumentException("사용자 정보를 확인해주세요.");
+        }
+
+        Member findMember = memberRepository.findByMemberIdAndRetired(memberId, false)
+                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
+
+        return MemberSearchRespDto.builder()
+                .memberId(findMember.getMemberId())
+                .memberName(findMember.getName())
+                .ddd(findMember.getPhoneNumber().getDdd())
+                .tel1(findMember.getPhoneNumber().getTel1())
+                .tel2(findMember.getPhoneNumber().getTel2())
+                .build();
     }
 }

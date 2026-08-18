@@ -23,9 +23,8 @@ public class MemberController {
     public ResponseEntity<?> searchMember(@PathVariable String memberId,
                                           @AuthenticationPrincipal MemberDetails memberDetails) {
         Member member = memberDetails.getMember();
-        //MemberSearchRespDto searchRespDto =  memberService.searchMember(memberId, member);
-        //return new ResponseEntity(new ResponseDto<>(1, "사용자 정보를 조회했습니다.", searchRespDto), HttpStatus.OK);
-        return null;
+        MemberSearchRespDto searchRespDto =  memberService.searchMember(memberId, member);
+        return new ResponseEntity<>(new ResponseDto<>(1, "사용자 정보를 조회했습니다.", searchRespDto), HttpStatus.OK);
     }
 
     @PostMapping
