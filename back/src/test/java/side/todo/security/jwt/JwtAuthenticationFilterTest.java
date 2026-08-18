@@ -14,7 +14,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 import side.todo.domain.Member;
-import side.todo.dto.join.MemberJoinReqDto;
+import side.todo.domain.PhoneNumber;
+import side.todo.dto.member.MemberJoinReqDto;
 import side.todo.dto.login.LoginReqDto;
 import side.todo.repository.MemberRepository;
 import tools.jackson.databind.ObjectMapper;
@@ -54,7 +55,15 @@ class JwtAuthenticationFilterTest {
 
         String encryptPassword = passwordEncoder.encode(memberJoinReqDto.getPassword());
 
-        memberRepository.save(Member.from(memberJoinReqDto, encryptPassword));
+        PhoneNumber phoneNumber = PhoneNumber.builder()
+                .ddd(memberJoinReqDto.getDdd())
+                .tel1(memberJoinReqDto.getTel1())
+                .tel2(memberJoinReqDto.getTel2())
+                .build();
+
+        Member member = Member.create(memberJoinReqDto.getMemberId(), memberJoinReqDto.getMemberName(), encryptPassword, phoneNumber);
+
+        memberRepository.save(member);
     }
 
     @Test
