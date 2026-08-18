@@ -26,7 +26,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
-        if(!isHeaderVerify(request)) {
+        if(isHeaderVerify(request)) {
             String token = request.getHeader(jwtProperties.getAccessTokenHeader());
             MemberDetails userDetails = (MemberDetails) JwtUtil.verity(token, jwtProperties);
 
