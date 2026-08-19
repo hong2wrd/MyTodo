@@ -35,11 +35,16 @@ public class TodoType extends BaseEntity {
                 .build();
     }
 
+    public void update(String title) {
+        this.title = title;
+    }
+
     public ToDoTypeRespDto toDto() {
         return ToDoTypeRespDto.builder()
                 .todoTypeId(id)
                 .todoTitle(title)
                 .build();
     }
+
 
 }

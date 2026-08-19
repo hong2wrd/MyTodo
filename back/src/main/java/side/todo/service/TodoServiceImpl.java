@@ -30,7 +30,7 @@ public class TodoServiceImpl implements TodoService {
      * @return TodoSaveRespDto
      */
     @Override
-    public TodoSaveRespDto todoSave(TodoSaveReqDto todoSaveReqDto, Member member) {
+    public TodoSaveRespDto saveTodo(TodoSaveReqDto todoSaveReqDto, Member member) {
 
         TodoType findTodoType = todoTypeRepository.findByMemberAndTitle(member, todoSaveReqDto.getTodoType())
                 .orElseThrow(() -> new CustomNotFoundException("Todo 타입을 확인해주세요."));
@@ -54,7 +54,7 @@ public class TodoServiceImpl implements TodoService {
      * @return TodoUpdateRespDto
      */
     @Override
-    public TodoUpdateRespDto todoUpdate(TodoUpdateReqDto todoUpdateReqDto, Member member) {
+    public TodoUpdateRespDto updateTodo(TodoUpdateReqDto todoUpdateReqDto, Member member) {
         Todo findTodo = todoRepository.findByIdAndMember(todoUpdateReqDto.getTodoId(), member)
                 .orElseThrow(() -> new CustomNotFoundException("Todo를 찾을 수 없습니다."));
 
@@ -77,12 +77,23 @@ public class TodoServiceImpl implements TodoService {
      * @param member
      */
     @Override
-    public void todoDelete(Long todoId, Member member) {
+    public void deleteTodo(Long todoId, Member member) {
         Todo findTodo = todoRepository.findByIdAndMember(todoId, member)
                 .orElseThrow(() -> new CustomNotFoundException("Todo를 찾을 수 없습니다."));
 
         todoRepository.delete(findTodo);
     }
+
+    @Override
+    public void deleteTodoByTodoTypeAndMember(TodoType todoType, Member member) {
+        List<Long> findTodoIds = todoRepository.findByTodoTypeAndMember(todoType, member)
+                .stream()
+                .map(todo -> todo.getId())
+                .collect(Collectors.toList());
+
+        todoRepository.deleteTodo(findTodoIds);
+    }
+
 
     /**
      * 단건 조회
