@@ -1,12 +1,11 @@
 package side.todo.domain;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+import side.todo.dto.todoType.ToDoTypeRespDto;
 
+@Getter
 @Entity
 @Builder(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -28,4 +27,19 @@ public class TodoType extends BaseEntity {
     protected void assignMember(Member member) {
         this.member = member;
     }
+
+    public static TodoType create(String title, Member member) {
+        return TodoType.builder()
+                .title(title)
+                .member(member)
+                .build();
+    }
+
+    public ToDoTypeRespDto toDto() {
+        return ToDoTypeRespDto.builder()
+                .todoTypeId(id)
+                .todoTitle(title)
+                .build();
+    }
+
 }
