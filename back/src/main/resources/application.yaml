@@ -7,12 +7,11 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
         format_sql: true
-    database-platform: org.hibernate.dialect.MySQLDialect
 
   redis:
     host: localhost
@@ -27,7 +26,9 @@ spring:
     accessTokenHeader: Authorization
     refreshTokenHeader: Refresh-Token
 
-  logging:
-    level:
-      org.hibernate.SQL: debug
-      org.hibernate.orm.jdbc.bind: trace
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
+    org.hibernate.orm.jdbc.extract: TRACE
+    org.hibernate.orm.jdbc.bind.internal: TRACE
