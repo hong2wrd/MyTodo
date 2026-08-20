@@ -1,0 +1,10 @@
+.ButtonBox {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.ButtonBox > button {
+    width: 30%;
+    border-radius: 10px;
+}
