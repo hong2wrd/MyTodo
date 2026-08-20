@@ -14,4 +14,6 @@ public interface MemberService {
     void updatePassword(MemberUpdatePasswordReqDto updatePasswordReqDto, Member member);
 
     MemberSearchRespDto searchMember(String memberId, Member member);
+
+    MemberConflictRespDto searchConflictMember(String memberId);
 }

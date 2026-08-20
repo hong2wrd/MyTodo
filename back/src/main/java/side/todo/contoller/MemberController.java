@@ -27,6 +27,12 @@ public class MemberController {
         return new ResponseEntity<>(new ResponseDto<>(1, "사용자 정보를 조회했습니다.", searchRespDto), HttpStatus.OK);
     }
 
+    @GetMapping("/{memberId}/conflict")
+    public ResponseEntity<?> searchConflictMember(@PathVariable String memberId) {
+        MemberConflictRespDto memberConflictRespDto = memberService.searchConflictMember(memberId);
+        return new ResponseEntity<>(new ResponseDto<>(1, "사용자 정보를 조회했습니다.", memberConflictRespDto), HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<?> joinMember(@RequestBody @Valid MemberJoinReqDto joinReqDto) {
         MemberJoinRespDto joinRespDto = memberService.joinMember(joinReqDto);

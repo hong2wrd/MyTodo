@@ -113,4 +113,12 @@ public class MemberServiceImpl implements MemberService {
                 .tel2(findMember.getPhoneNumber().getTel2())
                 .build();
     }
+
+    @Override
+    public MemberConflictRespDto searchConflictMember(String memberId) {
+        return MemberConflictRespDto.builder()
+                .memberId(memberId)
+                .conflict(memberRepository.findByMemberIdAndRetired(memberId, false).isPresent())
+                .build();
+    }
 }

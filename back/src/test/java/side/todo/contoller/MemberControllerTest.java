@@ -261,4 +261,21 @@ class MemberControllerTest {
         // then
         resultActions.andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
+
+    @Test
+    @DisplayName("사용자 중복 확인 성공")
+    @WithUserDetails(value = "test0000", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    void successConflictPassword() throws Exception {
+        // given
+        String memberId = "test0000";
+        // when
+        ResultActions resultActions = mvc.perform(get("/member/" + memberId + "/conflict"));
+        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
+        System.out.println("responseBody = " + responseBody);
+
+        // then
+        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
+        resultActions.andExpect(jsonPath("$.data.conflict").value(true));
+    }
+
 }
