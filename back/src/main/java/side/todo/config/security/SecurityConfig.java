@@ -54,10 +54,10 @@ public class SecurityConfig {
 
                 .exceptionHandling(eh -> eh
                         .authenticationEntryPoint((request, response, authException) -> {
-                            response(response, new ResponseDto<>(-1, "로그인을 진해해 주세요.", null), HttpStatus.UNAUTHORIZED);
+                            response(response, new ResponseDto<>(-1, "로그인을 진해해 주세요."), HttpStatus.UNAUTHORIZED);
                         })
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
-                            response(response, new ResponseDto<>(-1, "권한이 없습니다.", null), HttpStatus.FORBIDDEN);
+                            response(response, new ResponseDto<>(-1, "권한이 없습니다."), HttpStatus.FORBIDDEN);
                         })
                 )
                 .build();

@@ -8,8 +8,8 @@ import side.todo.domain.TodoType;
 import side.todo.dto.todoType.ToDoTypeRespDto;
 import side.todo.dto.todoType.TodoTypeSaveReqDto;
 import side.todo.dto.todoType.TodoTypeUpdateReqDto;
-import side.todo.exception.CustomNotFoundException;
-import side.todo.repository.TodoRepository;
+import side.todo.exception.ApiException;
+import side.todo.exception.ErrorCode;
 import side.todo.repository.TodoTypeRepository;
 
 import java.util.List;
@@ -34,7 +34,7 @@ public class TodoTypeServiceImpl implements TodoTypeService {
     @Override
     public ToDoTypeRespDto saveTodoType(TodoTypeSaveReqDto todoTypeSaveReqDto, Member member) {
         if(!todoTypeSaveReqDto.getMemberId().equals(member.getMemberId())) {
-            throw new IllegalArgumentException("사용자 정보르 확인바랍니다.");
+            throw new ApiException(ErrorCode.MEM_CONFIRM);
         }
 
         return todoTypeRepository.save(TodoType.create(todoTypeSaveReqDto.getTitle(), member))
@@ -44,11 +44,11 @@ public class TodoTypeServiceImpl implements TodoTypeService {
     @Override
     public ToDoTypeRespDto updateTodoType(TodoTypeUpdateReqDto todotypeUpdateReqDto, Member member) {
         if(!todotypeUpdateReqDto.getMemberId().equals(member.getMemberId())) {
-            throw new IllegalArgumentException("사용자 정보르 확인바랍니다.");
+            throw new ApiException(ErrorCode.MEM_CONFIRM);
         }
 
         TodoType findTodoType = todoTypeRepository.findByIdAndMember(todotypeUpdateReqDto.getTodoTypeId(), member)
-                .orElseThrow(() -> new CustomNotFoundException("Todo 타입을 찾을 수 없습니다."));
+                .orElseThrow(() -> new ApiException(ErrorCode.TODO_TYPE_NOT_FOUND));
 
         findTodoType.update(todotypeUpdateReqDto.getTitle());
 
@@ -58,7 +58,7 @@ public class TodoTypeServiceImpl implements TodoTypeService {
     @Override
     public void deleteTodoType(Long todoTypeId, Member member) {
         TodoType findTodoType = todoTypeRepository.findByIdAndMember(todoTypeId, member)
-                .orElseThrow(() -> new CustomNotFoundException("Todo 타입을 찾을 수 없습니다."));
+                .orElseThrow(() -> new ApiException(ErrorCode.TODO_TYPE_NOT_FOUND));
 
         todoService.deleteTodoByTodoTypeAndMember(findTodoType, member);
 

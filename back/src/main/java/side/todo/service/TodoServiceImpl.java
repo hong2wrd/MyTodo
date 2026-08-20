@@ -7,7 +7,8 @@ import side.todo.domain.Member;
 import side.todo.domain.Todo;
 import side.todo.domain.TodoType;
 import side.todo.dto.todo.*;
-import side.todo.exception.CustomNotFoundException;
+import side.todo.exception.ApiException;
+import side.todo.exception.ErrorCode;
 import side.todo.repository.TodoRepository;
 import side.todo.repository.TodoTypeRepository;
 
@@ -33,7 +34,7 @@ public class TodoServiceImpl implements TodoService {
     public TodoSaveRespDto saveTodo(TodoSaveReqDto todoSaveReqDto, Member member) {
 
         TodoType findTodoType = todoTypeRepository.findByMemberAndTitle(member, todoSaveReqDto.getTodoType())
-                .orElseThrow(() -> new CustomNotFoundException("Todo 타입을 확인해주세요."));
+                .orElseThrow(() -> new ApiException(ErrorCode.TODO_TYPE_NOT_FOUND));
 
         Todo saveTodo = todoRepository.save(Todo.create(todoSaveReqDto.getTitle(), todoSaveReqDto.getContent(), findTodoType, member));
 
@@ -56,10 +57,10 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public TodoUpdateRespDto updateTodo(TodoUpdateReqDto todoUpdateReqDto, Member member) {
         Todo findTodo = todoRepository.findByIdAndMember(todoUpdateReqDto.getTodoId(), member)
-                .orElseThrow(() -> new CustomNotFoundException("Todo를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ApiException(ErrorCode.TODO_NOT_FOUND));
 
         TodoType findTodoType = todoTypeRepository.findByMemberAndTitle(member, todoUpdateReqDto.getTodoType())
-                    .orElseThrow(() -> new CustomNotFoundException("Todo 타입을 확인해주세요."));
+                    .orElseThrow(() -> new ApiException(ErrorCode.TODO_TYPE_NOT_FOUND));
 
         findTodo.update(todoUpdateReqDto.getTitle(), todoUpdateReqDto.getContent(), findTodoType);
 
@@ -79,7 +80,7 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public void deleteTodo(Long todoId, Member member) {
         Todo findTodo = todoRepository.findByIdAndMember(todoId, member)
-                .orElseThrow(() -> new CustomNotFoundException("Todo를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ApiException(ErrorCode.TODO_NOT_FOUND));
 
         todoRepository.delete(findTodo);
     }
@@ -88,7 +89,7 @@ public class TodoServiceImpl implements TodoService {
     public void deleteTodoByTodoTypeAndMember(TodoType todoType, Member member) {
         List<Long> findTodoIds = todoRepository.findByTodoTypeAndMember(todoType, member)
                 .stream()
-                .map(todo -> todo.getId())
+                .map(Todo::getId)
                 .collect(Collectors.toList());
 
         todoRepository.deleteTodo(findTodoIds);
@@ -104,14 +105,14 @@ public class TodoServiceImpl implements TodoService {
     @Override
     public TodoRespDto searchTodo(Long todoId, Member member) {
         return todoRepository.findByIdAndMember(todoId, member)
-                .orElseThrow(() -> new CustomNotFoundException("Todo를 찾을 수 없습니다."))
+                .orElseThrow(() -> new ApiException(ErrorCode.TODO_NOT_FOUND))
                 .toDto();
     }
 
     @Override
     public List<TodoRespDto> searchTodos(Long todoTypeId, Member member) {
         TodoType findTodoType = todoTypeRepository.findByIdAndMember(todoTypeId, member)
-                .orElseThrow(()-> new CustomNotFoundException("TodoType을 찾을 수 없습니다."));
+                .orElseThrow(()-> new ApiException(ErrorCode.TODO_TYPE_NOT_FOUND));
 
         return todoRepository.findByMemberAndTodoType(member, findTodoType)
                 .stream()

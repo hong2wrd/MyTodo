@@ -1,6 +1,5 @@
 package side.todo.exception.handler;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,18 +29,9 @@ public class ExceptionHandlers {
         return new ResponseEntity<>(responseDto, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<?> entityNotFoundExceptionHandler(EntityNotFoundException e) {
-        return new ResponseEntity<>(new ResponseDto<>(-1, e.getMessage()), HttpStatus.NOT_FOUND);
-    }
-
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<?> apiExceptionHandler(ApiException e) {
         return new ResponseEntity<>(new ResponseDto<>(-1, e.getMessage(), e.getErrorMap()), e.getHttpStatus());
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<?> runTimeExceptionHandler(RuntimeException e) {
-        return new ResponseEntity<>(new ResponseDto<>(-1, e.getMessage(), null), HttpStatus.BAD_REQUEST);
-    }
 }

@@ -3,26 +3,22 @@ package side.todo.exception;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Getter
 public class ApiException extends RuntimeException {
 
-    private Map<String, String> errorMap = new HashMap<>();
-    private HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+    private Map<String, String> errorMap;
+    private HttpStatus httpStatus;
 
-    public ApiException(String message) {
-        super(message);
-    }
-    public ApiException(String message, HttpStatus httpStatus) {
-        super(message);
-        this.httpStatus = httpStatus;
+    public ApiException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.httpStatus = errorCode.getHttpStatus();
     }
 
-    public ApiException(String message, Map<String, String> errorMap, HttpStatus httpStatus) {
-        super(message);
+    public ApiException(ErrorCode errorCode, Map<String, String> errorMap) {
+        super(errorCode.getMessage());
+        this.httpStatus = errorCode.getHttpStatus();
         this.errorMap = errorMap;
-        this.httpStatus = httpStatus;
     }
 }

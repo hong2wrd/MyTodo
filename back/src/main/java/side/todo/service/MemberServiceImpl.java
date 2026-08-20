@@ -1,6 +1,5 @@
 package side.todo.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -8,7 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import side.todo.domain.Member;
 import side.todo.domain.PhoneNumber;
 import side.todo.dto.member.*;
-import side.todo.exception.ConflictException;
+import side.todo.exception.ApiException;
+import side.todo.exception.ErrorCode;
 import side.todo.repository.MemberRepository;
 
 @Service
@@ -28,7 +28,7 @@ public class MemberServiceImpl implements MemberService {
     public MemberJoinRespDto joinMember(MemberJoinReqDto joinReqDto) {
         memberRepository.findByMemberIdAndRetired(joinReqDto.getMemberId(), false)
                 .ifPresent(member -> {
-                    throw new ConflictException("중복된 아이디 입니다.");
+                    throw new ApiException(ErrorCode.MEM_CONFLICT);
                 });
 
         String encryptPassword = passwordEncoder.encode(joinReqDto.getPassword());
@@ -56,7 +56,7 @@ public class MemberServiceImpl implements MemberService {
     public void retireMember(MemberRetireReqDto retireReqDto) {
 
         Member findMember = memberRepository.findByMemberIdAndRetired(retireReqDto.getMemberId(), false)
-                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ApiException(ErrorCode.MEM_NOT_FOUND));
 
         findMember.retire();
     }
@@ -69,7 +69,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberUpdateRespDto updateMember(MemberUpdateReqDto updateReqDto) {
         Member findMember = memberRepository.findByMemberIdAndRetired(updateReqDto.getMemberId(), false)
-                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ApiException(ErrorCode.MEM_NOT_FOUND));
 
         findMember.update(updateReqDto.getMemberName(), updateReqDto.getDdd(), updateReqDto.getTel1(), updateReqDto.getTel2());
 
@@ -86,11 +86,11 @@ public class MemberServiceImpl implements MemberService {
     public void updatePassword(MemberUpdatePasswordReqDto updatePasswordReqDto, Member member) {
 
         if(!member.getMemberId().equals(updatePasswordReqDto.getMemberId())) {
-            throw new IllegalArgumentException("사용자의 오류가 발생하였습니다.");
+            throw new ApiException(ErrorCode.BAD_REQUEST);
         }
 
         Member findMember = memberRepository.findByMemberIdAndRetired(updatePasswordReqDto.getMemberId(), false)
-                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ApiException(ErrorCode.MEM_NOT_FOUND));
 
         String encryptPassword = passwordEncoder.encode(updatePasswordReqDto.getChangePassword());
         findMember.changePassword(encryptPassword);
@@ -99,11 +99,11 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberSearchRespDto searchMember(String memberId, Member member) {
         if(!memberId.equals(member.getMemberId())) {
-            throw new IllegalArgumentException("사용자 정보를 확인해주세요.");
+            throw new ApiException(ErrorCode.MEM_CONFIRM);
         }
 
         Member findMember = memberRepository.findByMemberIdAndRetired(memberId, false)
-                .orElseThrow(() -> new EntityNotFoundException("사용자를 찾을 수 없습니다."));
+                .orElseThrow(() -> new ApiException(ErrorCode.MEM_NOT_FOUND));
 
         return MemberSearchRespDto.builder()
                 .memberId(findMember.getMemberId())
