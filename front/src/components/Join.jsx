@@ -1,13 +1,13 @@
 import './Join.css';
-import InputBox from './InputBox';
 import ButtonBox from './ButtonBox';
-import Input from './Input';
 import Button from './Button';
 
 import API from './API';
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Join = () => {
+    const nav = useNavigate();
     
     const [input, setInput] = useState({
         memberId : "",
@@ -29,13 +29,21 @@ const Join = () => {
             return;
         }
 
-        const response = await API.get(`/member/${input.memberId}/conflict`);
-        const data = response.data.data;
-
-        setInput({
-            ...input,
-            conflict : data.conflict
-        });
+        await API.get(`/member/${input.memberId}/conflict`)
+            .then(res => {
+                const data = res.data.data;
+                setInput({
+                    ...input,
+                    conflict : data.conflict
+                });
+            }
+            ).catch(e => {
+                setInput({
+                    ...input,
+                    conflict : ""
+                });
+            }
+        );
     };
 
     const memberJoinSubmit = async () => {
@@ -68,14 +76,29 @@ const Join = () => {
             return;
         }
         
-        const response = await API.post('/member', {
+        try {
+            const response = await API.post('/member', {
                 memberId : input.memberId,
                 password : input.password1,
                 memberName : input.memberName,
                 ddd : input.ddd,
                 tel1 : input.tel1,
                 tel2 : input.tel2,
-        });
+            });
+
+            const data = response.data;
+
+            console.log(data);
+            window.alert(data.msg)
+            nav("/");
+            
+        } catch(e) {
+            const data = e.response?.data;
+            if(data?.code === -1) {
+                window.alert(data.msg);
+            }
+        }
+        
         
     }
     const onInputChange = (e) => {
@@ -101,16 +124,15 @@ const Join = () => {
 
     return (
         <div className="Join">
-            <div>
-                <h2>가입하기</h2>
-            </div>
+            <h2>가입하기</h2>
             <div className="content">
                 <p>아이디</p>
-                <Input
+                <input
                     ref={(el) => inputRef.current.memberId = el}
                     type={'text'}
                     name={'memberId'}
-                    onChange={onInputChange}/>
+                    onChange={onInputChange}
+                />
                 <Button
                     text={'중복 확인'}
                     onClick={memberCoflictCheck}/>
@@ -121,12 +143,12 @@ const Join = () => {
             </div>
             <div className="content">
                 <p>비밀번호</p>
-                <Input
+                <input
                     ref={(el) => inputRef.current.password1 = el}
                     name={'password1'}
                     type={'password'}
                     onChange={onInputChange}/>
-                <Input
+                <input
                     ref={(el) => inputRef.current.password2 = el}
                     name={'password2'}
                     type={'password'}
@@ -137,7 +159,7 @@ const Join = () => {
             </div>
             <div className="content">
                 <p>이름</p>
-                <Input
+                <input
                     ref={(el) => inputRef.current.name = el}
                     name={'memberName'}
                     type={'text'}
@@ -145,17 +167,17 @@ const Join = () => {
             </div>
             <div className="content">
                 <p>핸드폰번호</p>
-                <Input
+                <input
                     ref={(el) => inputRef.current.ddd = el}
                     name={'ddd'}
                     type={'text'}
                     onChange={onInputChange} />
-                <Input
+                <input
                     ref={(el) => inputRef.current.tel1 = el}
                     name={'tel1'}
                     type={'text'}
                     onChange={onInputChange} />
-                <Input
+                <input
                     ref={(el) => inputRef.current.tel2 = el}
                     name={'tel2'}
                     type={'text'}

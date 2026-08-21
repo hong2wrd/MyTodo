@@ -7,23 +7,37 @@ import JoinPage from './pages/JoinPage';
 import LoginPage from './pages/LoginPage';
 import TodoPage from './pages/TodoPage';
 
-const TodoStatusContext = createContext();
-const TodoDispatchContext = createContext();
+export const TodoStatusContext = createContext();
+export const TodoDispatchContext = createContext();
 
 function reducer(state, action) {
 
-  let nextState = [action.data, ...state];
-
-  return nextState;
+  switch (action.type) {
+    case 'LOGIN':
+      return {
+          ...state,
+          isLogin: true
+      };
+    case 'LOGOUT':
+      return {
+          ...state,
+          isLogin: false
+      };
+    default:
+      return state;
+  }
 }
 
 function App() {
   const [count, setCount] = useState(0)
-  const [data, dispatch] = useReducer(reducer, []);
+  const [info, dispatch] = useReducer(reducer, {
+    memberId : "",
+    isLogin : false
+  });
 
   return (
     <>
-      <TodoStatusContext.Provider value={data}>
+      <TodoStatusContext.Provider value={{info, dispatch}}>
         <TodoDispatchContext.Provider value={{}}>
           <Routes>
             <Route path="/" element={<HomePage/>}></Route>

@@ -1,15 +1,24 @@
 import './Login.css';
-import { useState } from 'react';
-import Input from './InputBox';
+import { useContext, useRef, useState } from 'react';
 import Button from './Button';
 import API from './API';
+import { TodoStatusContext } from '../App';
+import { setAccessToken } from './API';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-
+    const { info, dispatch } = useContext(TodoStatusContext);
+    const nav = useNavigate();
     const [input, setInput] = useState({
         memberId : "",
         password : ""
     });
+    const [span, setSpan] = useState({
+        memberId : "",
+        password : ""
+    });
+
+    const inputRef = useRef({});
 
     const onChangeInput = (e) => {
         let name = e.target.name;
@@ -19,42 +28,112 @@ const Login = () => {
             ...input,
             [name] : value
         });
+
+        setSpan({
+            ...span,
+            [name] : ""
+        });
     };
 
-    const onClickButton = (e) => {
-        handleLogin();
-    };
+    const onClickButton = async () => {
 
-    const handleLogin = async () => {
+        if(validationCheck("memberId", "아이디")) {
+            return;
+        }
+
+        const regex = /^[a-z0-9]+$/; // 숫자, 영어소문자
+        if(! regex.test(input.memberId)) {
+            setSpan({
+                ...span,
+                memberId : "아이디는 영문(소문자) 및 숫자만 입력이 가능합니다."
+            });
+            return;
+        }
+
+
+        if(validationCheck("password", "비밀번호")) {
+            return;
+        }
+
         try {
             const response = await API.post("/login", {
             ...input
             });
-            console.log(response);
+            
+            const accessToken = response.headers.getAuthorization();
+            setAccessToken(accessToken);
+
+            window.alert(response.data.msg);
+            
+            dispatch({
+                type: "LOGIN",
+                payload: ""
+            });
+
+            nav('/', {replace: true});
         } catch(e) {
             console.log(e);
+            const data = e.response.data;
+            
+            if(data.code === -1) {
+                window.alert(data.msg);
+
+                setInput({
+                    ...input,
+                    password : ""
+                });
+
+                inputRef.current.password.focus();
+            }
         }
-        
+    }
 
+    /**
+     * 유효성 검사
+     * @param {*} key 
+     * @param {*} msg 
+     * @returns 
+     */
+    const validationCheck = (key, msg) => {        
+        if(!input[key]) {
+            setSpan({
+                ...span,
+                [key] : `${msg}를 입력해주세요.`
+            });
 
+            inputRef.current[key].focus();
+            return true;
+        }
+
+        return false;
     }
 
     return (
         <div className='Login'>
-            <div className='input_section'>
-                <input
-                    name='memberId'
-                    type='text'
-                    onChange={onChangeInput}
-                    value={input.memberId}
-                />
-                <input
-                    name='password'
-                    type='password'
-                    onChange={onChangeInput}
-                    value={input.password}
-                />
-                
+            <h2>로그인</h2>
+            <div className='container'>
+                <div className='input_box'>
+                    <p>아이디</p>
+                    <input
+                        name='memberId'
+                        type='text'
+                        onChange={onChangeInput}
+                        value={input.memberId}
+                        ref={el => inputRef.current.memberId = el}
+                    />
+                </div>
+                <span>{span.memberId}</span>
+                <div className='input_box'>
+                    <p>비밀번호</p>
+                    <input
+                        name='password'
+                        type='password'
+                        onChange={onChangeInput}
+                        value={input.password}
+                        ref={el => inputRef.current.password = el}
+                    />
+                </div>
+                <span>{span.password}</span>
             </div>
             <Button text={'로그인'} onClick={onClickButton}/>
         </div>      

@@ -1,0 +1,25 @@
+.Login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+    height: 70vh;
+}
+
+.Login .container .input_box {
+    width: 100%;
+    display: flex;
+    gap: 10px;
+}
+
+.Login .container .input_box > p {
+    width: 100%
+}
+
+.Login .container > span {
+    display: inline-block;
+    height: 10px;
+    font-size: 1rem;
+    color : red;
+}
