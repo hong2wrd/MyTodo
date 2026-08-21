@@ -5,7 +5,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jspecify.annotations.Nullable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +22,7 @@ import side.todo.security.MemberDetails;
 import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.time.Duration;
 
 import static side.todo.util.ResponseUtil.response;
 
@@ -73,7 +76,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 });
 
         response.addHeader(jwtProperties.getAccessTokenHeader(), jwtAccessToken);
-        response.addHeader(jwtProperties.getRefreshTokenHeader(), jwtRefreshToken);
+
+        ResponseCookie cookie = ResponseCookie.from(jwtProperties.getRefreshTokenHeader(), jwtRefreshToken)
+                .httpOnly(true)
+                .secure(false) // 운영(HTTPS)에서는 true, 개발에서 false
+                .sameSite("Lax")
+                .path("/")
+                .maxAge(Duration.ofDays(jwtProperties.getRefreshExpirationTime()))
+                .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
         ResponseDto<LoginRespDto> responseDto = new ResponseDto<>(1, "로그인 성공", LoginRespDto.from(memberDetails.getMember()));
 

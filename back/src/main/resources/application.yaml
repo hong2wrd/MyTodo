@@ -21,7 +21,7 @@ spring:
   jwt:
     prefix: "Bearer "
     access-expiration-time: 900_000 # 15분
-    refresh-expiration-time: 604_800_000 # 7일
+    refresh-expiration-time: 7 # 7일
     secret: mytodo-secret-key!
     accessTokenHeader: Authorization
     refreshTokenHeader: Refresh-Token

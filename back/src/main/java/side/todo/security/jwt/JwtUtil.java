@@ -23,7 +23,7 @@ public class JwtUtil {
                 .withClaim("role", member.getRole().name())
                 .withClaim("type", jwtType.toString())
                 .sign(Algorithm.HMAC512(jwtProperties.getSecret()));
-        return jwtProperties.getPrefix() + jwtToken;
+        return (JwtType.ACCESS.equals(jwtType) ? jwtProperties.getPrefix() : "") + jwtToken;
     }
 
     /**

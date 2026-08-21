@@ -23,7 +23,7 @@ import tools.jackson.databind.ObjectMapper;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.boot.test.context.SpringBootTest.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @Transactional
 @ActiveProfiles("test")
@@ -87,13 +87,17 @@ class JwtAuthenticationFilterTest {
 
         System.out.println("responseBody = " + responseBody);
         System.out.println("jwtAccessToken = " + jwtAccessToken);
-        System.out.println("jwtRefreshToken = " + jwtRefreshToken);
 
         // then
-        resultActions.andExpect(MockMvcResultMatchers.status().isOk());
         assertNotNull(jwtAccessToken);
-        assertNotNull(jwtRefreshToken);
-        resultActions.andExpect(jsonPath("$.data.name").value("testName"));
+        resultActions
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$.data.name").value("testName"))
+                .andExpect(header().exists(jwtProperties.getAccessTokenHeader()))
+                .andExpect(cookie().exists(jwtProperties.getRefreshTokenHeader()))
+                .andExpect(cookie().httpOnly(jwtProperties.getRefreshTokenHeader(), true))
+            ;
+
 
     }
 
