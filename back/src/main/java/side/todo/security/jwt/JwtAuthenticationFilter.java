@@ -5,6 +5,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -31,6 +32,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final AuthenticationManager authenticationManager;
     private final JwtProperties jwtProperties;
     private final RedisRefreshTokenRepository redisRefreshTokenRepository;
+
+    @Value("${cookie.secure}")
+    private boolean secure;
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager,
                                    JwtProperties jwtProperties,
@@ -79,7 +83,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         ResponseCookie cookie = ResponseCookie.from(jwtProperties.getRefreshTokenHeader(), jwtRefreshToken)
                 .httpOnly(true)
-                .secure(false) // 운영(HTTPS)에서는 true, 개발에서 false
+                .secure(secure)
                 .sameSite("Lax")
                 .path("/")
                 .maxAge(Duration.ofDays(jwtProperties.getRefreshExpirationTime()))
@@ -87,7 +91,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
 
-        ResponseDto<LoginRespDto> responseDto = new ResponseDto<>(1, "로그인 성공", LoginRespDto.from(memberDetails.getMember()));
+        ResponseDto<LoginRespDto> responseDto = new ResponseDto<>(1, "로그인이 성공하였습니다.", LoginRespDto.from(memberDetails.getMember()));
 
         response(response, responseDto, HttpStatus.OK);
     }
@@ -97,7 +101,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
      */
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
-        response(response, new ResponseDto<>(-1, "로그인 실패", null), HttpStatus.UNAUTHORIZED);
+        response(response, new ResponseDto<>(-1, "아이디 및 비밀번호를 확인해 주세요.", null), HttpStatus.UNAUTHORIZED);
     }
 
     /**

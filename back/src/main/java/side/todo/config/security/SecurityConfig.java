@@ -1,6 +1,7 @@
 package side.todo.config.security;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -55,7 +56,7 @@ public class SecurityConfig {
 
                 .exceptionHandling(eh -> eh
                         .authenticationEntryPoint((request, response, authException) -> {
-                            response(response, new ResponseDto<>(-1, "로그인을 진해해 주세요."), HttpStatus.UNAUTHORIZED);
+                            response(response, new ResponseDto<>(-1, "로그인을 진행해 주세요."), HttpStatus.UNAUTHORIZED);
                         })
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
                             response(response, new ResponseDto<>(-1, "권한이 없습니다."), HttpStatus.FORBIDDEN);
@@ -71,6 +72,7 @@ public class SecurityConfig {
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
+        configuration.setExposedHeaders(List.of(jwtProperties.getAccessTokenHeader()));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration); //  모든 URL 패턴에 cors 허용 설정

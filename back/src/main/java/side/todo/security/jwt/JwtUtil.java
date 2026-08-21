@@ -45,7 +45,7 @@ public class JwtUtil {
      * 토큰에서 사용자 아이디 추출
      * return memberId
      */
-    public static String getUserId(String token, JwtProperties jwtProperties) {
+    public static String getMemberId(String token, JwtProperties jwtProperties) {
         DecodedJWT decodedJwt = JWT.decode(
                 token.replace(jwtProperties.getPrefix(), "")
         );
