@@ -1,4 +1,5 @@
 import axios from "axios"
+import { jwtDecode } from 'jwt-decode';
 
 const Authorization = "Authorization";
 
@@ -9,6 +10,16 @@ export const setAccessToken = token => {
 export const getAccessToken = () => {
     return localStorage.getItem(Authorization);
 };
+
+export const getMembrInfoByToken = (key) => {
+    const token = getAccessToken();
+    
+    if(!token  || !key) {
+        return "";
+    }
+    
+    return jwtDecode(token)[key];
+}
 
 const API = axios.create({
     baseURL: 'http://localhost:8080',

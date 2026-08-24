@@ -16,11 +16,13 @@ function reducer(state, action) {
     case 'LOGIN':
       return {
           ...state,
+          memberName: action.payload.memberName,
           isLogin: true
       };
     case 'LOGOUT':
       return {
           ...state,
+          memberName: "",
           isLogin: false
       };
     default:
@@ -31,7 +33,7 @@ function reducer(state, action) {
 function App() {
   const [count, setCount] = useState(0)
   const [info, dispatch] = useReducer(reducer, {
-    memberId : "",
+    memberName : "",
     isLogin : false
   });
 
