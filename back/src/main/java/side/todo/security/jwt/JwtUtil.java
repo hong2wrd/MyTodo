@@ -20,6 +20,7 @@ public class JwtUtil {
                 .withSubject("MY_TODO")
                 .withExpiresAt(new Date(System.currentTimeMillis() + jwtProperties.getAccessExpirationTime()))
                 .withClaim("id", member.getMemberId())
+                .withClaim("name", member.getName())
                 .withClaim("role", member.getRole().name())
                 .withClaim("type", jwtType.toString())
                 .sign(Algorithm.HMAC512(jwtProperties.getSecret()));
