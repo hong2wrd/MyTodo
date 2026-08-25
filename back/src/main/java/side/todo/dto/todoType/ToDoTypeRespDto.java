@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ToDoTypeRespDto {
     private Long todoTypeId;
-    private String todoTitle;
+    private String todoTypeTitle;
 }

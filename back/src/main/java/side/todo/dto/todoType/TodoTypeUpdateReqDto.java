@@ -15,9 +15,9 @@ public class TodoTypeUpdateReqDto {
     private String memberId;
 
     @NotNull
-    private Long TodoTypeId;
+    private Long todoTypeId;
 
     @NotBlank(message = "Todo Type 제목을 작성해주세요.")
     @Size(max = 10)
-    private String title;
+    private String todoTypeTitle;
 }

@@ -15,5 +15,5 @@ public class TodoTypeSaveReqDto {
 
     @NotBlank(message = "Todo Type 제목을 작성해주세요.")
     @Size(max = 10)
-    private String title;
+    private String todoTypeTitle;
 }

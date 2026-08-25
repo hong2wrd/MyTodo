@@ -22,7 +22,7 @@ public class TodoTypeController {
 
     private final TodoTypeService todoTypeService;
 
-    @GetMapping("/list")
+    @GetMapping
     public ResponseEntity<?> searchTodoTypes(@AuthenticationPrincipal MemberDetails memberDetails) {
         List<ToDoTypeRespDto> toDoTypeRespDtos = todoTypeService.searchTodoTypes(memberDetails.getMember());
         return new ResponseEntity<>(new ResponseDto<>(1, "Todo 타입을 조회하였습니다.", toDoTypeRespDtos), HttpStatus.OK);
@@ -31,14 +31,13 @@ public class TodoTypeController {
     @PostMapping
     public ResponseEntity<?> saveTodoType(@RequestBody @Valid TodoTypeSaveReqDto todoTypeSaveReqDto,
                                           @AuthenticationPrincipal MemberDetails memberDetails) {
-        ToDoTypeRespDto toDoTypeRespDto = todoTypeService.saveTodoType(todoTypeSaveReqDto, memberDetails.getMember());
+        ToDoTypeRespDto toDoTypeRespDto = todoTypeService.saveTodoType(todoTypeSaveReqDto);
         return new ResponseEntity<>(new ResponseDto<>(1, "Todo 타입을 저장하였습니다.", toDoTypeRespDto), HttpStatus.CREATED);
     }
 
     @PatchMapping
-    public ResponseEntity<?> updateTodoType(@RequestBody @Valid TodoTypeUpdateReqDto todotypeUpdateReqDto,
-                                            @AuthenticationPrincipal MemberDetails memberDetails) {
-        ToDoTypeRespDto toDoTypeRespDto = todoTypeService.updateTodoType(todotypeUpdateReqDto, memberDetails.getMember());
+    public ResponseEntity<?> updateTodoType(@RequestBody @Valid TodoTypeUpdateReqDto todotypeUpdateReqDto) {
+        ToDoTypeRespDto toDoTypeRespDto = todoTypeService.updateTodoType(todotypeUpdateReqDto);
         return new ResponseEntity<>(new ResponseDto<>(1, "Todo 타입을 변경하였습니다.", toDoTypeRespDto), HttpStatus.OK);
     }
 

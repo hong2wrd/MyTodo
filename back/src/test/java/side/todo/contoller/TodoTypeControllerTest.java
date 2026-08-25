@@ -96,7 +96,7 @@ class TodoTypeControllerTest {
         // given
 
         // when
-        ResultActions resultActions = mvc.perform(get("/todoType/list"));
+        ResultActions resultActions = mvc.perform(get("/todoType"));
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("responseBody = " + responseBody);
 
@@ -111,7 +111,7 @@ class TodoTypeControllerTest {
         // given
         TodoTypeSaveReqDto todoTypeSaveReqDto = new TodoTypeSaveReqDto();
         todoTypeSaveReqDto.setMemberId("test0000");
-        todoTypeSaveReqDto.setTitle("기타");
+        todoTypeSaveReqDto.setTodoTypeTitle("기타");
 
         ObjectMapper om = new ObjectMapper();
         String requestBody = om.writeValueAsString(todoTypeSaveReqDto);
@@ -135,7 +135,7 @@ class TodoTypeControllerTest {
         // given
         TodoTypeSaveReqDto todoTypeSaveReqDto = new TodoTypeSaveReqDto();
         todoTypeSaveReqDto.setMemberId("test0001");
-        todoTypeSaveReqDto.setTitle("기타");
+        todoTypeSaveReqDto.setTodoTypeTitle("기타");
 
         ObjectMapper om = new ObjectMapper();
         String requestBody = om.writeValueAsString(todoTypeSaveReqDto);
@@ -149,7 +149,7 @@ class TodoTypeControllerTest {
         System.out.println("responseBody = " + responseBody);
 
         // then
-        resultActions.andExpect(MockMvcResultMatchers.status().isBadRequest());
+        resultActions.andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test
@@ -159,7 +159,7 @@ class TodoTypeControllerTest {
         // given
         TodoTypeSaveReqDto todoTypeSaveReqDto = new TodoTypeSaveReqDto();
         todoTypeSaveReqDto.setMemberId("test0000");
-        todoTypeSaveReqDto.setTitle(" ");
+        todoTypeSaveReqDto.setTodoTypeTitle(" ");
 
         ObjectMapper om = new ObjectMapper();
         String requestBody = om.writeValueAsString(todoTypeSaveReqDto);
@@ -183,7 +183,7 @@ class TodoTypeControllerTest {
         // given
         TodoTypeSaveReqDto todoTypeSaveReqDto = new TodoTypeSaveReqDto();
         todoTypeSaveReqDto.setMemberId("test0000");
-        todoTypeSaveReqDto.setTitle("가나다라마바사아자차카");
+        todoTypeSaveReqDto.setTodoTypeTitle("가나다라마바사아자차카");
 
         ObjectMapper om = new ObjectMapper();
         String requestBody = om.writeValueAsString(todoTypeSaveReqDto);
@@ -208,7 +208,7 @@ class TodoTypeControllerTest {
         TodoTypeUpdateReqDto todoTypeUpdateReqDto = new TodoTypeUpdateReqDto();
         todoTypeUpdateReqDto.setTodoTypeId(todoTypeId);
         todoTypeUpdateReqDto.setMemberId("test0000");
-        todoTypeUpdateReqDto.setTitle("가나다라마바사아자차");
+        todoTypeUpdateReqDto.setTodoTypeTitle("가나다라마바사아자차");
 
         ObjectMapper om = new ObjectMapper();
         String requestBody = om.writeValueAsString(todoTypeUpdateReqDto);

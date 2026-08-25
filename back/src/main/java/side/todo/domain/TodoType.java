@@ -42,7 +42,7 @@ public class TodoType extends BaseEntity {
     public ToDoTypeRespDto toDto() {
         return ToDoTypeRespDto.builder()
                 .todoTypeId(id)
-                .todoTitle(title)
+                .todoTypeTitle(title)
                 .build();
     }
 

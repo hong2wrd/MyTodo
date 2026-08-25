@@ -11,9 +11,9 @@ public interface TodoTypeService {
 
     List<ToDoTypeRespDto> searchTodoTypes(Member member);
 
-    ToDoTypeRespDto saveTodoType(TodoTypeSaveReqDto todoTypeSaveReqDto, Member member);
+    ToDoTypeRespDto saveTodoType(TodoTypeSaveReqDto todoTypeSaveReqDto);
 
-    ToDoTypeRespDto updateTodoType(TodoTypeUpdateReqDto todotypeUpdateReqDto, Member member);
+    ToDoTypeRespDto updateTodoType(TodoTypeUpdateReqDto todotypeUpdateReqDto);
 
     void deleteTodoType(Long todoTypeId, Member member);
 }
