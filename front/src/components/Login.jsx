@@ -1,10 +1,10 @@
 import './Login.css';
 import { useContext, useRef, useState } from 'react';
 import Button from './Button';
-import API from './API';
+import API from '../hooks/API';
 import { TodoStatusContext } from '../App';
-import { setAccessToken } from './API';
 import { useNavigate } from 'react-router-dom';
+import { getMembrInfoByToken, setToken } from '../hooks/Token';
 
 const Login = () => {
     const { info, dispatch } = useContext(TodoStatusContext);
@@ -61,13 +61,16 @@ const Login = () => {
             });
             
             const accessToken = response.headers.getAuthorization();
-            setAccessToken(accessToken);
+            setToken(accessToken);
 
             window.alert(response.data.msg);
             
             dispatch({
                 type: "LOGIN",
-                payload: ""
+                payload: {
+                    memberId : getMembrInfoByToken("id"),
+                    memberName : getMembrInfoByToken("name")
+                }
             });
 
             nav('/', {replace: true});

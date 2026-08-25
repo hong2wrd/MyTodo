@@ -2,7 +2,7 @@ import './Join.css';
 import ButtonBox from './ButtonBox';
 import Button from './Button';
 
-import API from './API';
+import API from '../hooks/API';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -21,7 +21,6 @@ const Join = () => {
     });
 
     const inputRef = useRef({});
-
 
     const memberCoflictCheck = async () => {
 

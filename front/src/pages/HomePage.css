@@ -1,5 +1,5 @@
 .Home {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    
     margin-top: 10px;
 }

@@ -1,12 +1,12 @@
 import Join from '../components/Join';
-import TokenCheck from '../hooks/TokenCheck';
+import Token from '../hooks/Token';
 
 const JoinPage = () => {
-    TokenCheck();
+    Token();
     return (
-        <>
-        <Join/>
-        </>
+        <div>
+            <Join/>
+        </div>
     );
 }
 
