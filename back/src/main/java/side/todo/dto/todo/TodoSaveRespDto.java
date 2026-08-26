@@ -13,5 +13,5 @@ public class TodoSaveRespDto {
     private String title;
     private String content;
     private boolean completed;
-    private String todoType;
+    private Long todoType;
 }

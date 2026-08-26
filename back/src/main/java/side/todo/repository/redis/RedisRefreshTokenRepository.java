@@ -18,7 +18,7 @@ public class RedisRefreshTokenRepository implements RefreshTokenRepository {
     @Override
     public void save(String memberId, String refreshToken, long ttlSeconds) {
         redisTemplate.opsForValue()
-                .set(PREFIX + memberId, refreshToken, ttlSeconds, TimeUnit.SECONDS);
+                .set(PREFIX + memberId, refreshToken, ttlSeconds, TimeUnit.MILLISECONDS);
     }
 
     @Override

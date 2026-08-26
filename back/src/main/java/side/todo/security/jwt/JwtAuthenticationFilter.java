@@ -86,7 +86,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .secure(secure)
                 .sameSite("Lax")
                 .path("/")
-                .maxAge(Duration.ofDays(jwtProperties.getRefreshExpirationTime()))
+                .maxAge(Duration.ofMillis(jwtProperties.getRefreshExpirationTime()))
                 .build();
 
         response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());

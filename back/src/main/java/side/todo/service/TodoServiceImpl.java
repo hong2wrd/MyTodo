@@ -9,6 +9,7 @@ import side.todo.domain.TodoType;
 import side.todo.dto.todo.*;
 import side.todo.exception.ApiException;
 import side.todo.exception.ErrorCode;
+import side.todo.repository.MemberRepository;
 import side.todo.repository.TodoRepository;
 import side.todo.repository.TodoTypeRepository;
 
@@ -21,29 +22,32 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TodoServiceImpl implements TodoService {
 
+    private final MemberRepository memberRepository;
     private final TodoRepository todoRepository;
     private final TodoTypeRepository todoTypeRepository;
 
     /**
      * 투두 저장
      * @param todoSaveReqDto
-     * @param member
      * @return TodoSaveRespDto
      */
     @Override
-    public TodoSaveRespDto saveTodo(TodoSaveReqDto todoSaveReqDto, Member member) {
+    public TodoSaveRespDto saveTodo(TodoSaveReqDto todoSaveReqDto) {
 
-        TodoType findTodoType = todoTypeRepository.findByMemberAndTitle(member, todoSaveReqDto.getTodoType())
+        Member findMember = memberRepository.findByMemberIdAndRetired(todoSaveReqDto.getMemberId(), false)
+                .orElseThrow(() -> new ApiException(ErrorCode.MEM_NOT_FOUND));
+
+        TodoType findTodoType = todoTypeRepository.findByIdAndMember(todoSaveReqDto.getTodoType(), findMember)
                 .orElseThrow(() -> new ApiException(ErrorCode.TODO_TYPE_NOT_FOUND));
 
-        Todo saveTodo = todoRepository.save(Todo.create(todoSaveReqDto.getTitle(), todoSaveReqDto.getContent(), findTodoType, member));
+        Todo saveTodo = todoRepository.save(Todo.create(todoSaveReqDto.getTitle(), todoSaveReqDto.getContent(), findTodoType, findMember));
 
         return TodoSaveRespDto.builder()
                 .memberId(saveTodo.getMember().getMemberId())
                 .todoId(saveTodo.getId())
                 .title(saveTodo.getTitle())
                 .content(saveTodo.getContent())
-                .todoType(Optional.ofNullable(todoSaveReqDto.getTodoType()).orElse(""))
+                .todoType(Optional.ofNullable(todoSaveReqDto.getTodoType()).orElse(0L))
                 .completed(saveTodo.isCompleted())
                 .build();
     }
@@ -75,11 +79,15 @@ public class TodoServiceImpl implements TodoService {
     /**
      * 투두 삭제
      * @param todoId
-     * @param member
+     * @param memberId
      */
     @Override
-    public void deleteTodo(Long todoId, Member member) {
-        Todo findTodo = todoRepository.findByIdAndMember(todoId, member)
+    public void deleteTodo(Long todoId, String memberId) {
+
+        Member findMember = memberRepository.findByMemberIdAndRetired(memberId, false)
+                .orElseThrow(() -> new ApiException(ErrorCode.MEM_NOT_FOUND));
+
+        Todo findTodo = todoRepository.findByIdAndMember(todoId, findMember)
                 .orElseThrow(() -> new ApiException(ErrorCode.TODO_NOT_FOUND));
 
         todoRepository.delete(findTodo);
@@ -95,7 +103,6 @@ public class TodoServiceImpl implements TodoService {
         todoRepository.deleteTodo(findTodoIds);
     }
 
-
     /**
      * 단건 조회
      * @param todoId
@@ -110,14 +117,36 @@ public class TodoServiceImpl implements TodoService {
     }
 
     @Override
-    public List<TodoRespDto> searchTodos(Long todoTypeId, Member member) {
-        TodoType findTodoType = todoTypeRepository.findByIdAndMember(todoTypeId, member)
-                .orElseThrow(()-> new ApiException(ErrorCode.TODO_TYPE_NOT_FOUND));
+    public List<TodoRespDto> searchTodos(Long todoTypeId, String memberId) {
+        Member findMember = memberRepository.findByMemberIdAndRetired(memberId, false)
+                .orElseThrow(() -> new ApiException(ErrorCode.MEM_NOT_FOUND));
 
-        return todoRepository.findByMemberAndTodoType(member, findTodoType)
-                .stream()
-                .map(Todo::toDto)
-                .collect(Collectors.toList());
+        return todoRepository.findByMemberAndTodoType(findMember, todoTypeId);
+    }
+
+    @Override
+    public void completeTodo(Long todoId, String memberId) {
+        Member findMember = memberRepository.findByMemberIdAndRetired(memberId, false)
+                .orElseThrow(() -> new ApiException(ErrorCode.MEM_NOT_FOUND));
+
+        Todo findTodo = todoRepository.findByIdAndMember(todoId, findMember)
+                .orElseThrow(() -> new ApiException(ErrorCode.TODO_NOT_FOUND));
+
+        findTodo.completed();
+    }
+
+    @Override
+    public void changeTodoType(Long todoId, Long todoTypeId, String memberId) {
+        Member findMember = memberRepository.findByMemberIdAndRetired(memberId, false)
+                .orElseThrow(() -> new ApiException(ErrorCode.MEM_NOT_FOUND));
+
+        Todo findTodo = todoRepository.findByIdAndMember(todoId, findMember)
+                .orElseThrow(() -> new ApiException(ErrorCode.TODO_NOT_FOUND));
+
+        TodoType findTodoType = todoTypeRepository.findByIdAndMember(todoTypeId, findMember)
+                .orElseThrow(() -> new ApiException(ErrorCode.TODO_TYPE_NOT_FOUND));
+
+        findTodo.changeTodoType(findTodoType);
     }
 
 }

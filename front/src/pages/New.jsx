@@ -1,13 +1,14 @@
 import Editor from "../components/Editor";
 import Header from "../components/Header";
-import Token from "../hooks/Token";
+import useLoginConfirm from "../hooks/useLoginConfirm";
 
 const New = () => {
-    Token();
+
+    useLoginConfirm();
 
     return (
-        <div>
-            <Header title={"투두 리스트"} />
+        <div className="New">
+            <Header title={"새로운 투두"} />
             <Editor/>
         </div>
     );

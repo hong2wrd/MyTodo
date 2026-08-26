@@ -2,6 +2,7 @@ package side.todo.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 import side.todo.dto.todo.TodoRespDto;
 
 @Entity
@@ -9,6 +10,7 @@ import side.todo.dto.todo.TodoRespDto;
 @Builder(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicUpdate
 public class Todo extends BaseEntity {
 
     @Id
@@ -50,9 +52,17 @@ public class Todo extends BaseEntity {
                 .build();
     }
 
+    public void completed() {
+        this.completed = !this.completed;
+    }
+
     public void update(String title, String content, TodoType todoType) {
         this.title = title;
         this.content = content;
+        this.todoType = todoType;
+    }
+
+    public void changeTodoType(TodoType todoType) {
         this.todoType = todoType;
     }
 
@@ -61,6 +71,7 @@ public class Todo extends BaseEntity {
                 .todoId(id)
                 .title(title)
                 .content(content)
+                .completed(completed)
                 .todoType(todoType.toDto())
                 .build();
     }

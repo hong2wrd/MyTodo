@@ -1,7 +1,6 @@
 package side.todo.config.security;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -47,7 +46,7 @@ public class SecurityConfig {
                 .logout(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/member", "/login", "/logout").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/member", "/login", "/logout", "/auth/refresh").permitAll()
                         .requestMatchers(HttpMethod.GET, "/member/{memberId}/conflict").permitAll()
                         .anyRequest().authenticated())
 

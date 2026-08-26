@@ -18,5 +18,5 @@ public class TodoSaveReqDto {
     @Size(max = 100, message = "본문은 100자까지 가능합니다.")
     private String content;
 
-    private String todoType;
+    private Long todoType;
 }

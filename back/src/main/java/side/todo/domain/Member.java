@@ -48,10 +48,11 @@ public class Member extends BaseEntity {
         todoType.assignMember(this);
     }
 
-    public static Member of(String memberId, String role) {
+    public static Member of(String memberId, String role, String name) {
         return Member.builder()
                 .memberId(memberId)
                 .role(Role.valueOf(role))
+                .name(name)
                 .build();
     }
 

@@ -21,7 +21,7 @@ spring:
   jwt:
     prefix: "Bearer "
     access-expiration-time: 1_800_000 # 30분
-    refresh-expiration-time: 7 # 7일
+    refresh-expiration-time: 604_800 # 7일
     secret: mytodo-secret-key!
     accessTokenHeader: Authorization
     refreshTokenHeader: Refresh-Token
@@ -30,6 +30,7 @@ logging:
   level:
     org.hibernate.SQL: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
+    org.springframework.security: DEBUG
 
 cookie:
   secure: false #운영(HTTPS)에서는 true, 개발에서 false

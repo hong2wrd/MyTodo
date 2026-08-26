@@ -133,6 +133,7 @@ const TodoType = () => {
                         value={type.title}
                         onChange={onChangeTitle}
                         index={i}
+                        maxLength={10}
                     />
                     <div className="item_btn">
                         <button

@@ -1,9 +1,11 @@
 import Header from "../components/Header";
 import TodoType from "../components/TodoType";
-import Token from "../hooks/Token";
+import useLoginConfirm from "../hooks/useLoginConfirm";
 
 const TodoTypePage = () => {
     
+    useLoginConfirm();
+
     return (
         <div>
             <Header title={"Todo Type"} />

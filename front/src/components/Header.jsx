@@ -1,37 +1,19 @@
 import './Header.css';
 
-import { useContext, useEffect } from "react";
-import API from "../hooks/API";
-import { getMembrInfoByToken, getToken, setToken } from "../hooks/Token";
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { TodoStatusContext } from '../App';
+import useLogout from '../hooks/useLogout';
 
 const Header = ({title}) => {
     const { info, dispatch } = useContext(TodoStatusContext);
     
     const nav = useNavigate();
 
-    const accessToken = getToken();
+    const logout = useLogout();
 
     const loginOnClick = async (e) => {
-        
-        if(accessToken !== "") {
-            try {
-            await API.post('/logout');
-            } catch(e) {
-                console.error(e);
-            }
-            setToken("");
-
-            dispatch({
-                type: "LOGOUT",
-                payload: ""
-            });
-
-            nav("/", {replace: false})
-        } else {
-            nav("/login");
-        }
+        logout();
     }
 
     return (

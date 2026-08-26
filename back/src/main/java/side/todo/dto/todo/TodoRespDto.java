@@ -13,5 +13,6 @@ public class TodoRespDto {
     private Long todoId;
     private String title;
     private String content;
+    private boolean completed;
     private ToDoTypeRespDto todoType;
 }

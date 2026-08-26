@@ -12,10 +12,14 @@ export const getToken = () => {
     return localStorage.getItem(Authorization);
 };
 
+export const removeToken = () => {
+    localStorage.removeItem(Authorization);
+}
+
 export const getMembrInfoByToken = (key) => {
     const token = getToken();
     
-    if(!token  || !key) {
+    if((!token || token === 'undefined') || !key) {
         return "";
     }
     
@@ -25,7 +29,7 @@ export const getMembrInfoByToken = (key) => {
 /**
  * Token이 있을 경우 '/' 화면으로 전환
  */
-const Token = () => {
+const useToken = () => {
     const nav = useNavigate();
     
     useEffect(() => {
@@ -35,4 +39,4 @@ const Token = () => {
     }, []);
 };
 
-export default Token;
+export default useToken;

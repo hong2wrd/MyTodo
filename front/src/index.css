@@ -33,3 +33,22 @@ input {
     outline: 0;
     font-size: 1.5rem;
 }
+
+button {
+    background-color: rgb(236, 236, 236);
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size : 1rem;
+    white-space: nowrap;
+}
+
+.POSITIVE {
+    background-color: rgb(100, 201, 100);
+    color: white;
+}
+.NEGATIVE {
+  background-color: rgb(253, 86, 95);
+  color: white;
+}

@@ -12,6 +12,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import side.todo.security.MemberDetails;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 모든 요청 URL 검증(토큰)
@@ -26,6 +27,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
+        // 토근 확인 예외
+        if(isExclusionRequest(request)) {
+            chain.doFilter(request, response);
+            return;
+        }
+
+        // 토큰 확인
         if(isHeaderVerify(request)) {
             String token = request.getHeader(jwtProperties.getAccessTokenHeader());
             MemberDetails userDetails = (MemberDetails) JwtUtil.verity(token, jwtProperties);
@@ -34,11 +42,21 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+
         chain.doFilter(request, response);
     }
 
     private boolean isHeaderVerify(HttpServletRequest request) {
         String header = request.getHeader(jwtProperties.getAccessTokenHeader());
         return header != null && header.startsWith(jwtProperties.getPrefix());
+    }
+
+    /**
+     * 예외 URL 요청 확인
+     * @param request
+     * @return
+     */
+    private boolean isExclusionRequest(HttpServletRequest request){
+        return List.of("/auth/refresh", "/logout").contains(request.getRequestURI());
     }
 }

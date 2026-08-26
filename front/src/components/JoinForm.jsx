@@ -1,4 +1,4 @@
-import './Join.css';
+import './JoinForm.css';
 import ButtonBox from './ButtonBox';
 import Button from './Button';
 
@@ -6,7 +6,7 @@ import API from '../hooks/API';
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Join = () => {
+const JoinForm = () => {
     const nav = useNavigate();
     
     const [input, setInput] = useState({
@@ -187,4 +187,4 @@ const Join = () => {
     );
 };
 
-export default Join;
+export default JoinForm;

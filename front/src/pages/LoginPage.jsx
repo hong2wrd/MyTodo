@@ -1,8 +1,8 @@
 import Login from '../components/Login';
-import Token from '../hooks/Token';
+import useToken from '../hooks/useToken';
 
 const LoginPage = () => {
-    Token();
+    useToken();
     return (
         <div>
             <Login/>

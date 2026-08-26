@@ -1,14 +1,15 @@
 import './Login.css';
-import { useContext, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import Button from './Button';
 import API from '../hooks/API';
-import { TodoStatusContext } from '../App';
-import { useNavigate } from 'react-router-dom';
-import { getMembrInfoByToken, setToken } from '../hooks/Token';
+import { useLocation, useNavigate } from 'react-router-dom';
+import {  setToken } from '../hooks/useToken';
+import useLogin from '../hooks/useLogin';
 
 const Login = () => {
-    const { info, dispatch } = useContext(TodoStatusContext);
     const nav = useNavigate();
+    const location = useLocation();
+
     const [input, setInput] = useState({
         memberId : "",
         password : ""
@@ -19,6 +20,8 @@ const Login = () => {
     });
 
     const inputRef = useRef({});
+
+    const login = useLogin();
 
     const onChangeInput = (e) => {
         let name = e.target.name;
@@ -65,15 +68,11 @@ const Login = () => {
 
             window.alert(response.data.msg);
             
-            dispatch({
-                type: "LOGIN",
-                payload: {
-                    memberId : getMembrInfoByToken("id"),
-                    memberName : getMembrInfoByToken("name")
-                }
-            });
+            login();
 
-            nav('/', {replace: true});
+            const from = location.state?.from || "/";
+            console.log(location);
+            nav(from, {replace: true});
         } catch(e) {
             console.log(e);
             const data = e.response.data;
@@ -122,7 +121,9 @@ const Login = () => {
                         type='text'
                         onChange={onChangeInput}
                         value={input.memberId}
+                        maxLength={20}
                         ref={el => inputRef.current.memberId = el}
+                        placeholder='아이디'
                     />
                 </div>
                 <span>{span.memberId}</span>
@@ -134,6 +135,7 @@ const Login = () => {
                         onChange={onChangeInput}
                         value={input.password}
                         ref={el => inputRef.current.password = el}
+                        placeholder='비밀번호'
                     />
                 </div>
                 <span>{span.password}</span>

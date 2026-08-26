@@ -96,7 +96,7 @@ class TodoControllerTest {
         todoSaveReqDto.setMemberId("test0000");
         todoSaveReqDto.setTitle("test title");
         todoSaveReqDto.setContent("test content...");
-        todoSaveReqDto.setTodoType("일상");
+        todoSaveReqDto.setTodoType(saveTodoType.getId());
 
         ObjectMapper om = new ObjectMapper();
         String requestBody = om.writeValueAsString(todoSaveReqDto);
@@ -149,7 +149,7 @@ class TodoControllerTest {
         todoSaveReqDto.setMemberId("test0000");
         todoSaveReqDto.setTitle("test title");
         todoSaveReqDto.setContent("test content...");
-        todoSaveReqDto.setTodoType("일상1");
+        todoSaveReqDto.setTodoType(1000L);
 
         ObjectMapper om = new ObjectMapper();
         String requestBody = om.writeValueAsString(todoSaveReqDto);
@@ -282,9 +282,10 @@ class TodoControllerTest {
     void successTodosSearchTest() throws Exception {
         // given
         Long todoTypeId = saveTodoType.getId();
+        String memberId = "test0000";
 
         // when
-        ResultActions resultActions = mvc.perform(get("/todo/list/" + todoTypeId));
+        ResultActions resultActions = mvc.perform(get("/todo/" + memberId + "/" + todoTypeId));
 
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("responseBody = " + responseBody);
