@@ -11,10 +11,12 @@ import Edit from "./pages/Edit";
 
 function AppContent() {
 
+    const login = useLogin();
+
     // 토큰에 유무에 따른 로그인 정보 설정
     useEffect(() => {
         if( getToken() ) {    
-            useLogin();
+            login();
         }
     }, []);
 

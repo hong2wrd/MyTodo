@@ -71,7 +71,7 @@ const Login = () => {
             login();
 
             const from = location.state?.from || "/";
-            console.log(location);
+            
             nav(from, {replace: true});
         } catch(e) {
             console.log(e);
