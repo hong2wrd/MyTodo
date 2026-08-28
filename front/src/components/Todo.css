@@ -1,44 +1,48 @@
-.TodoList {
+.Todo {
     margin-top: 10px;
 }
 
-.TodoList .todo_btn {
+.Todo .todo_btn {
     display: flex;
     justify-content: end;
     margin-bottom: 20px;
 }
 
-.TodoList .todo_empty {
+.Todo .todo_empty {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-.TodoList .todo_item {
+.Todo .todo_item {
     display: grid;
     grid-template-columns: auto auto 1fr auto;
     gap: 10px;
 }
 
-.TodoList .todo_item .item_content {
+.Todo .todo_item .item_content {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.TodoList .todo_item .item_content > p {
+.Todo .todo_item .item_content > p {
     font-size: 1rem;
     color: gray;
     margin-top: 0;
     cursor: pointer;
 }
 
-.TodoList .todo_item .item_content > span {
+.Todo .todo_item .item_content > span {
     cursor: pointer;
 }
 
-.TodoList .todo_item .title .type {
+.Todo .todo_item .title .type {
     font-size: 1rem;
     margin-right: 10px;
+}
+
+.Todo .todo_item .item_content .completed {
+    text-decoration: line-through;
 }

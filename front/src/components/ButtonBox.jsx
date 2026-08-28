@@ -1,11 +1,10 @@
 import './ButtonBox.css';
-import Button from './Button';
 
 const ButtonBox = ({ leftText, leftOnClick, rightText, rightOnClick }) => {
     return (
         <div className="ButtonBox">
-            <Button text={leftText} onClick={leftOnClick}/>
-            <Button text={rightText} onClick={rightOnClick}/>
+            <button onClick={leftOnClick}>{leftText}</button>
+            <button onClick={rightOnClick}>{rightText}</button>
         </div>
     )
 };

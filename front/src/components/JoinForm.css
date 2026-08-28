@@ -44,3 +44,13 @@
     border-radius: 10px;
 }
 
+.Join .btn_box {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.Join .btn_box > button {
+    width: 30%;
+    border-radius: 10px;
+}

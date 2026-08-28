@@ -1,6 +1,5 @@
 import './JoinForm.css';
 import ButtonBox from './ButtonBox';
-import Button from './Button';
 
 import API from '../hooks/API';
 import { useRef, useState } from 'react';
@@ -132,9 +131,7 @@ const JoinForm = () => {
                     name={'memberId'}
                     onChange={onInputChange}
                 />
-                <Button
-                    text={'중복 확인'}
-                    onClick={memberCoflictCheck}/>
+                <button onClick={memberCoflictCheck}>{'중복 확인'}</button>
                 <span className={`Span_${input.conflict ? "NEGATIVE" : "POSITIVE"}`}>
                     { input.conflict === "" ? "" : (input.conflict ? "사용 불가능" : "사용 가능") }
                 </span>
@@ -182,7 +179,7 @@ const JoinForm = () => {
                     type={'text'}
                     onChange={onInputChange} />
             </div>
-            <ButtonBox leftText={'가입하기'} leftOnClick={memberJoinSubmit} rightText={'돌아가기'}/>
+            <ButtonBox leftText={'가입하기'} leftOnClick={memberJoinSubmit} rightText={'돌아가기'} rightOnClick={() => nav(-1)}/>
         </div>
     );
 };

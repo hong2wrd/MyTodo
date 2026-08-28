@@ -1,10 +1,10 @@
 import './Login.css';
 import { useRef, useState } from 'react';
-import Button from './Button';
 import API from '../hooks/API';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {  setToken } from '../hooks/useToken';
 import useLogin from '../hooks/useLogin';
+import ButtonBox from './ButtonBox';
 
 const Login = () => {
     const nav = useNavigate();
@@ -140,7 +140,7 @@ const Login = () => {
                 </div>
                 <span>{span.password}</span>
             </div>
-            <Button text={'로그인'} onClick={onClickButton}/>
+            <ButtonBox leftText={'로그인'} leftOnClick={onClickButton} rightText={'가입하기'} rightOnClick={() => nav('/join')} />
         </div>      
     );
 };

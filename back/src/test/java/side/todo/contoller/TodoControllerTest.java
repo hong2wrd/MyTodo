@@ -176,7 +176,7 @@ class TodoControllerTest {
         todoUpdateReqDto.setTodoId(todoId);
         todoUpdateReqDto.setTitle("afterTitle");
         todoUpdateReqDto.setContent("afterContent");
-        todoUpdateReqDto.setTodoType("일상");
+        todoUpdateReqDto.setTodoType(saveTodoType.getId());
 
         ObjectMapper om = new ObjectMapper();
         String requestBody = om.writeValueAsString(todoUpdateReqDto);
@@ -204,7 +204,7 @@ class TodoControllerTest {
         todoUpdateReqDto.setTodoId(100L);
         todoUpdateReqDto.setTitle("afterTitle");
         todoUpdateReqDto.setContent("afterContent");
-        todoUpdateReqDto.setTodoType("일상");
+        todoUpdateReqDto.setTodoType(0L);
 
         ObjectMapper om = new ObjectMapper();
         String requestBody = om.writeValueAsString(todoUpdateReqDto);

@@ -2,7 +2,7 @@ package side.todo.security.jwt;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,8 +46,8 @@ public class JwtUtil {
             String role = decodedJwt.getClaim("role").asString();
             String name = decodedJwt.getClaim("name").asString();
             return new MemberDetails(Member.of(id, role, name));
-        } catch(TokenExpiredException e) {
-            throw new InternalAuthenticationServiceException(e.getMessage());
+        } catch(JWTVerificationException e) {
+            throw new InternalAuthenticationServiceException( "JWT가 만료되었거나 유효하지 않습니다.", e);
         }
     }
 
@@ -56,9 +56,10 @@ public class JwtUtil {
      * return memberId
      */
     public static String getMemberId(String token, JwtProperties jwtProperties) {
-        DecodedJWT decodedJwt = JWT.decode(
-                token.replace(jwtProperties.getPrefix(), "")
-        );
+        DecodedJWT decodedJwt = JWT
+                .require(Algorithm.HMAC512(jwtProperties.getSecret()))
+                .build()
+                .verify(token.replace(jwtProperties.getPrefix(), ""));
         return decodedJwt.getClaim("id").asString();
     }
 

@@ -2,7 +2,6 @@ import "./TodoType.css";
 
 import { useContext, useEffect, useState } from "react";
 import API from "../hooks/API";
-import Button from "./Button";
 import { TodoStatusContext } from "../App";
 
 const TodoType = () => {
@@ -121,7 +120,7 @@ const TodoType = () => {
     return (
     <div className="TodoType">
         <div className="top">
-            <Button text={'추가하기'} onClick={onClickAddButton} />
+            <button onClick={onClickAddButton}>{'추가하기'}</button>
         </div>
         <div className="content">
             {

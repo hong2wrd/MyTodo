@@ -2,12 +2,13 @@ import { useContext, useEffect, useState } from "react";
 import API from "../hooks/API";
 import './Editor.css';
 import { TodoStatusContext } from "../App";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 
 const Editor = () => {
     const nav = useNavigate();
-    const { info, dispatch } = useContext(TodoStatusContext);
+    const params = useParams();
+    const { info } = useContext(TodoStatusContext);
     const [ todoTypes, setTodoTypes ] = useState([]);
     const [ todo, setTodo ] = useState(
         {
@@ -52,39 +53,52 @@ const Editor = () => {
         }
 
         try {
-            const response = await API
-                .post('/todo',
-                    {
-                        ...todo,
-                        memberId: info.memberId
-                    }
-                )
-            console.log(response);
-            if(response.status === 201) {
+            const todoId = Number(params.todoId);
+
+            const requestBody = {
+                ...todo,
+                memberId: info.memberId,
+                todoId: todoId
+            };
+
+            const response = todoId ? await API.put('/todo', requestBody) : await API.post('/todo', requestBody);
+
+            if([201, 200].includes(response.status)) {
                 window.alert(response.data.msg);
                 nav("/",{replace: true})
             }
         } catch(e) {
-            console.log(e)
+            window.alert("Todo 처리에 문제가 발생하였습니다.");
         }
     }
 
     useEffect(() => {
-        try {
-            API.get("/todoType")
+        API.get("/todoType")
             .then(res => {
                 const data = res.data.data;
                 
                 setTodoTypes(data);
-                console.log(data)
 
                 if(data.length > 0) {
                     setTodo({...todo, todoType: Number(data[0].todoTypeId)})
                 }
+            })
+            .then(() => {
+                const todoId = params.todoId;
+                if(todoId) {
+                    API.get(`/todo/${todoId}`)
+                        .then(res => {
+                            const data = res.data.data
+                            setTodo({
+                                ...res.data.data,
+                                todoType: data.todoType.todoTypeId
+                            });
+                    });
+                }
+            })
+            .catch(e => {
+                window.alert("Todo 조회에 문제가 발생하였습니다.");
             });
-        } catch(e) {
-            console.log(e);
-        }
     }, []);
 
     return (
@@ -92,7 +106,9 @@ const Editor = () => {
             <div className="content">
                 <select onChange={onChangeSelect} value={todo.todoType}>
                     {todoTypes.map(todoType => (
-                        <option value={Number(todoType.todoTypeId)}>
+                        <option
+                            key={todoType.todoTypeId}
+                            value={Number(todoType.todoTypeId)}>
                             {todoType.todoTypeTitle}
                         </option>
                     ))}
@@ -104,6 +120,7 @@ const Editor = () => {
                     type={"text"}
                     maxLength={20}
                     placeholder='할일을 적어주세요.'
+                    value={todo.title}
                     onChange={onChangeInput}
                 />
             </div>
@@ -112,6 +129,7 @@ const Editor = () => {
                 <textarea
                     maxLength={100}
                     placeholder='상세 내역을 적어주세요.'
+                    value={todo.content}
                     onChange={onChangeTextarea}
                 />
             </div>

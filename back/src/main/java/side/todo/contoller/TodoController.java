@@ -29,7 +29,7 @@ public class TodoController {
     @PutMapping
     public ResponseEntity<?> updateTodo(@RequestBody @Valid TodoUpdateReqDto todoUpdateReqDto,
                                         @AuthenticationPrincipal MemberDetails memberDetails) {
-        TodoUpdateRespDto todoUpdateRespDto = todoService.updateTodo(todoUpdateReqDto, memberDetails.getMember());
+        TodoUpdateRespDto todoUpdateRespDto = todoService.updateTodo(todoUpdateReqDto, memberDetails.getMember().getMemberId());
         return new ResponseEntity<>(new ResponseDto<>(1, "Todo가 변경되었습니다.", todoUpdateRespDto), HttpStatus.OK);
     }
 
@@ -65,7 +65,7 @@ public class TodoController {
     @GetMapping("/{todoId}")
     public ResponseEntity<?> searchTodo(@PathVariable Long todoId,
                                         @AuthenticationPrincipal MemberDetails memberDetails) {
-        TodoRespDto todoRespDto = todoService.searchTodo(todoId, memberDetails.getMember());
+        TodoRespDto todoRespDto = todoService.searchTodo(todoId, memberDetails.getMember().getMemberId());
         return new ResponseEntity<>(new ResponseDto<>(1, "Todo가 조회되었습니다.", todoRespDto), HttpStatus.OK);
     }
 

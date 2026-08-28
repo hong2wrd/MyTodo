@@ -23,3 +23,7 @@
     font-size: 1rem;
     color : red;
 }
+
+.Login .ButtonBox {
+    width: 50%;
+}

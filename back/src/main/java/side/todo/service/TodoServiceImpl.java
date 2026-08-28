@@ -55,15 +55,18 @@ public class TodoServiceImpl implements TodoService {
     /**
      * 투두 변경
      * @param todoUpdateReqDto
-     * @param member
+     * @param memberId
      * @return TodoUpdateRespDto
      */
     @Override
-    public TodoUpdateRespDto updateTodo(TodoUpdateReqDto todoUpdateReqDto, Member member) {
-        Todo findTodo = todoRepository.findByIdAndMember(todoUpdateReqDto.getTodoId(), member)
+    public TodoUpdateRespDto updateTodo(TodoUpdateReqDto todoUpdateReqDto, String memberId) {
+        Member findMember = memberRepository.findByMemberIdAndRetired(memberId, false)
+                .orElseThrow(() -> new ApiException(ErrorCode.MEM_NOT_FOUND));
+
+        Todo findTodo = todoRepository.findByIdAndMember(todoUpdateReqDto.getTodoId(), findMember)
                 .orElseThrow(() -> new ApiException(ErrorCode.TODO_NOT_FOUND));
 
-        TodoType findTodoType = todoTypeRepository.findByMemberAndTitle(member, todoUpdateReqDto.getTodoType())
+        TodoType findTodoType = todoTypeRepository.findByIdAndMember(todoUpdateReqDto.getTodoType(), findMember)
                     .orElseThrow(() -> new ApiException(ErrorCode.TODO_TYPE_NOT_FOUND));
 
         findTodo.update(todoUpdateReqDto.getTitle(), todoUpdateReqDto.getContent(), findTodoType);
@@ -106,12 +109,15 @@ public class TodoServiceImpl implements TodoService {
     /**
      * 단건 조회
      * @param todoId
-     * @param member
+     * @param memberId
      * @return TodoSearchRespDto
      */
     @Override
-    public TodoRespDto searchTodo(Long todoId, Member member) {
-        return todoRepository.findByIdAndMember(todoId, member)
+    public TodoRespDto searchTodo(Long todoId, String memberId) {
+        Member findMember = memberRepository.findByMemberIdAndRetired(memberId, false)
+                .orElseThrow(() -> new ApiException(ErrorCode.MEM_NOT_FOUND));
+
+        return todoRepository.findByIdAndMember(todoId, findMember)
                 .orElseThrow(() -> new ApiException(ErrorCode.TODO_NOT_FOUND))
                 .toDto();
     }

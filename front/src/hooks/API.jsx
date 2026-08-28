@@ -1,14 +1,19 @@
 import axios from "axios"
 import { getToken, removeToken, setToken } from "./useToken";
 
-const API = axios.create({
+const config = {
     baseURL: 'http://localhost:8080',
     headers: {
         "Content-type": "application/json"
     },
     withCredentials: true
-});
+}
 
+const API = axios.create(config);
+
+/**
+ * API 요청 전
+ */
 API.interceptors.request.use(config => {
     const accessToken = getToken();
     
@@ -18,6 +23,9 @@ API.interceptors.request.use(config => {
     return config;
 });
 
+/**
+ * API 요청 후
+ */
 API.interceptors.response.use(
     response => {
         return response;
@@ -40,14 +48,10 @@ API.interceptors.response.use(
 
             } catch (refreshError) {
                 // Refresh Token도 만료
-                try {
-                    await API.post('/logout');
-                
-                    removeToken();
+                removeToken();
 
-                } catch(e) {
-                    console.error(e);
-                }
+                window.location.replace("/login");
+
                 return Promise.reject(refreshError);
             }
         }
@@ -57,21 +61,13 @@ API.interceptors.response.use(
 
 );
 
+/**
+ * refresh token으로 신규 access Token 발급
+ * @returns Access Token
+ */
 const refreshAccessToken = async () => {
-    const response = await axios.create(
-        {
-            baseURL: "http://localhost:8080",
-            headers: {
-                "Content-type": "application/json"
-            },
-            withCredentials: true
-        }
-    ).post("/auth/refresh",
-        {},
-        {
-            withCredentials: true
-        }
-    );
+    const response = await axios.create(config)
+        .post("/auth/refresh", {}, { withCredentials: true } );
 
     return response.data;
 };

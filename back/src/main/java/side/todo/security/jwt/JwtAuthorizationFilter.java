@@ -4,9 +4,11 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import side.todo.security.MemberDetails;
@@ -17,6 +19,7 @@ import java.util.List;
 /**
  * 모든 요청 URL 검증(토큰)
  */
+@Slf4j
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     private final JwtProperties jwtProperties;
 
@@ -33,14 +36,18 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
 
-        // 토큰 확인
-        if(isHeaderVerify(request)) {
-            String token = request.getHeader(jwtProperties.getAccessTokenHeader());
-            MemberDetails userDetails = (MemberDetails) JwtUtil.verity(token, jwtProperties);
+        try {
+            // 토큰 확인
+            if(isHeaderVerify(request)) {
+                String token = request.getHeader(jwtProperties.getAccessTokenHeader());
+                MemberDetails userDetails = (MemberDetails) JwtUtil.verity(token, jwtProperties);
 
-            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        } catch (AuthenticationException e) {
+            log.error(e.getMessage(), e);
         }
 
         chain.doFilter(request, response);

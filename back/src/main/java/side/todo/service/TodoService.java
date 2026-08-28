@@ -9,13 +9,13 @@ import java.util.List;
 public interface TodoService {
     TodoSaveRespDto saveTodo(TodoSaveReqDto todoSaveReqDto);
 
-    TodoUpdateRespDto updateTodo(TodoUpdateReqDto todoUpdateReqDto, Member member);
+    TodoUpdateRespDto updateTodo(TodoUpdateReqDto todoUpdateReqDto, String memberId);
 
     void deleteTodo(Long todoId, String memberId);
 
     void deleteTodoByTodoTypeAndMember(TodoType todoType, Member member);
 
-    TodoRespDto searchTodo(Long todoId, Member member);
+    TodoRespDto searchTodo(Long todoId, String memberId);
 
     List<TodoRespDto> searchTodos(Long todoTypeId, String memberId);
 

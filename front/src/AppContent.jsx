@@ -27,7 +27,7 @@ function AppContent() {
             <Route path="/login" element={<LoginPage/>}/>
             <Route path="/new" element={<New/>}/>
             <Route path="/todoType" element={<TodoTypePage/>}/>
-            <Route path="/edit/:id" element={<Edit/>}/>
+            <Route path="/edit/:todoId" element={<Edit/>}/>
         </Routes>
     </>
 }
