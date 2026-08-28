@@ -40,7 +40,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             // 토큰 확인
             if(isHeaderVerify(request)) {
                 String token = request.getHeader(jwtProperties.getAccessTokenHeader());
-                MemberDetails userDetails = (MemberDetails) JwtUtil.verity(token, jwtProperties);
+                MemberDetails userDetails = (MemberDetails) JwtUtil.verify(token, jwtProperties);
 
                 Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 

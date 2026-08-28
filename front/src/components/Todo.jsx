@@ -23,7 +23,7 @@ const Todo = () => {
                         }
                     }));
             }).then(() => {
-                API.get(`/todo/${info.memberId}/0`)
+                API.get(`/todo/todoType/0`)
                 .then(res => {
                     const data = res.data.data;
                     setTodos(
@@ -35,9 +35,6 @@ const Todo = () => {
             setTodoTypes([]);
             setTodos([]);
         }
-
-
-
     }, [info]);
 
     const onChangeComplete = async (todoId, e) => {

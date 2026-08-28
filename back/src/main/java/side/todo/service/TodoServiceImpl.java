@@ -32,9 +32,9 @@ public class TodoServiceImpl implements TodoService {
      * @return TodoSaveRespDto
      */
     @Override
-    public TodoSaveRespDto saveTodo(TodoSaveReqDto todoSaveReqDto) {
+    public TodoSaveRespDto saveTodo(TodoSaveReqDto todoSaveReqDto, String memberId) {
 
-        Member findMember = memberRepository.findByMemberIdAndRetired(todoSaveReqDto.getMemberId(), false)
+        Member findMember = memberRepository.findByMemberIdAndRetired(memberId, false)
                 .orElseThrow(() -> new ApiException(ErrorCode.MEM_NOT_FOUND));
 
         TodoType findTodoType = todoTypeRepository.findByIdAndMember(todoSaveReqDto.getTodoType(), findMember)

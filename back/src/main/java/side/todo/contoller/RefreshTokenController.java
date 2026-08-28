@@ -38,7 +38,7 @@ public class RefreshTokenController {
         }
 
         try {
-            MemberDetails memberDetails = (MemberDetails) JwtUtil.verity(refreshToken, jwtProperties);
+            MemberDetails memberDetails = (MemberDetails) JwtUtil.verify(refreshToken, jwtProperties);
             Member member = memberDetails.getMember();
             // Access Token 생성
             String newAccessToken = JwtUtil.create(member, jwtProperties, JwtType.ACCESS);

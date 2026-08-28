@@ -57,7 +57,6 @@ const Editor = () => {
 
             const requestBody = {
                 ...todo,
-                memberId: info.memberId,
                 todoId: todoId
             };
 

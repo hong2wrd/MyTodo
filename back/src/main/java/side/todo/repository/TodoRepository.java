@@ -38,5 +38,5 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
 
     @Modifying(clearAutomatically = true)
     @Query("DELETE FROM Todo t WHERE t.id IN :findTodoIds")
-    void deleteTodo(@Param("ids") List<Long> findTodoIds);
+    void deleteTodo(@Param("findTodoIds") List<Long> findTodoIds);
 }

@@ -36,7 +36,7 @@ public class JwtUtil {
      * 토큰 확인
      * return MemberDetails
      */
-    public static UserDetails verity(String token, JwtProperties jwtProperties) {
+    public static UserDetails verify(String token, JwtProperties jwtProperties) {
         try {
             DecodedJWT decodedJwt = JWT
                     .require(Algorithm.HMAC512(jwtProperties.getSecret()))

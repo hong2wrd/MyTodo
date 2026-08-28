@@ -7,7 +7,7 @@ import side.todo.dto.todo.*;
 import java.util.List;
 
 public interface TodoService {
-    TodoSaveRespDto saveTodo(TodoSaveReqDto todoSaveReqDto);
+    TodoSaveRespDto saveTodo(TodoSaveReqDto todoSaveReqDto, String memberId);
 
     TodoUpdateRespDto updateTodo(TodoUpdateReqDto todoUpdateReqDto, String memberId);
 
