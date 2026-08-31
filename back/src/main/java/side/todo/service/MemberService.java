@@ -7,13 +7,13 @@ public interface MemberService {
 
     MemberJoinRespDto joinMember(MemberJoinReqDto joinReqDto);
 
-    void retireMember(MemberRetireReqDto retireReqDto);
+    void retireMember(String memberId);
 
-    MemberUpdateRespDto updateMember(MemberUpdateReqDto updateReqDto);
+    MemberUpdateRespDto updateMember(MemberUpdateReqDto updateReqDto, String memberId);
 
-    void updatePassword(MemberUpdatePasswordReqDto updatePasswordReqDto, Member member);
+    void updatePassword(MemberUpdatePasswordReqDto updatePasswordReqDto, String memberId);
 
-    MemberSearchRespDto searchMember(String memberId, Member member);
+    MemberSearchRespDto searchMember(String memberId);
 
     MemberConflictRespDto searchConflictMember(String memberId);
 }

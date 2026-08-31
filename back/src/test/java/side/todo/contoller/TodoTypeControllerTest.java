@@ -110,31 +110,6 @@ class TodoTypeControllerTest {
     void successSaveTodoTyposTest() throws Exception {
         // given
         TodoTypeSaveReqDto todoTypeSaveReqDto = new TodoTypeSaveReqDto();
-        todoTypeSaveReqDto.setMemberId("test0000");
-        todoTypeSaveReqDto.setTodoTypeTitle("기타");
-
-        ObjectMapper om = new ObjectMapper();
-        String requestBody = om.writeValueAsString(todoTypeSaveReqDto);
-
-        // when
-        ResultActions resultActions = mvc.perform(post("/todoType")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody)
-                );
-        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.println("responseBody = " + responseBody);
-
-        // then
-        resultActions.andExpect(MockMvcResultMatchers.status().isCreated());
-    }
-
-    @Test
-    @DisplayName("1-3. TodoType 저장 실패(사용자ID가 다를경우)")
-    @WithUserDetails(value = "test0000", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    void unsuccessSaveTodoTyposTest1() throws Exception {
-        // given
-        TodoTypeSaveReqDto todoTypeSaveReqDto = new TodoTypeSaveReqDto();
-        todoTypeSaveReqDto.setMemberId("test0001");
         todoTypeSaveReqDto.setTodoTypeTitle("기타");
 
         ObjectMapper om = new ObjectMapper();
@@ -149,7 +124,7 @@ class TodoTypeControllerTest {
         System.out.println("responseBody = " + responseBody);
 
         // then
-        resultActions.andExpect(MockMvcResultMatchers.status().isNotFound());
+        resultActions.andExpect(MockMvcResultMatchers.status().isCreated());
     }
 
     @Test
@@ -158,7 +133,6 @@ class TodoTypeControllerTest {
     void unsuccessSaveTodoTyposTest2() throws Exception {
         // given
         TodoTypeSaveReqDto todoTypeSaveReqDto = new TodoTypeSaveReqDto();
-        todoTypeSaveReqDto.setMemberId("test0000");
         todoTypeSaveReqDto.setTodoTypeTitle(" ");
 
         ObjectMapper om = new ObjectMapper();
@@ -182,7 +156,6 @@ class TodoTypeControllerTest {
     void unsuccessSaveTodoTyposTest3() throws Exception {
         // given
         TodoTypeSaveReqDto todoTypeSaveReqDto = new TodoTypeSaveReqDto();
-        todoTypeSaveReqDto.setMemberId("test0000");
         todoTypeSaveReqDto.setTodoTypeTitle("가나다라마바사아자차카");
 
         ObjectMapper om = new ObjectMapper();
@@ -207,7 +180,6 @@ class TodoTypeControllerTest {
         // given
         TodoTypeUpdateReqDto todoTypeUpdateReqDto = new TodoTypeUpdateReqDto();
         todoTypeUpdateReqDto.setTodoTypeId(todoTypeId);
-        todoTypeUpdateReqDto.setMemberId("test0000");
         todoTypeUpdateReqDto.setTodoTypeTitle("가나다라마바사아자차");
 
         ObjectMapper om = new ObjectMapper();

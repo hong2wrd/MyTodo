@@ -68,10 +68,9 @@ class MemberControllerTest {
     @WithUserDetails(value = "test0000", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void successSearch() throws Exception {
         // given
-        String memberId = "test0000";
 
         // when
-        ResultActions resultActions = mvc.perform(get("/member/" + memberId));
+        ResultActions resultActions = mvc.perform(get("/member"));
 
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("responseBody = " + responseBody);
@@ -161,35 +160,11 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("탈퇴 실패")
-    @WithUserDetails(value = "test0000", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    void unsuccessRetire() throws Exception {
-        // given
-        MemberRetireReqDto retireReqDto = new MemberRetireReqDto();
-        retireReqDto.setMemberId("test0001");
-
-        ObjectMapper om = new ObjectMapper();
-        String requestBody = om.writeValueAsString(retireReqDto);
-
-        // when
-        ResultActions resultActions = mvc.perform(delete("/member")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody)
-        );
-        String responseBody = resultActions.andReturn().getResponse().getContentAsString();
-        System.out.println("responseBody = " + responseBody);
-
-        // then
-        resultActions.andExpect(MockMvcResultMatchers.status().isNotFound());
-    }
-
-    @Test
     @DisplayName("사용자정보 변경 성공")
     @WithUserDetails(value = "test0000", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     void successUpdate() throws Exception {
         // given
         MemberUpdateReqDto updateReqDto = new MemberUpdateReqDto();
-        updateReqDto.setMemberId("test0000");
         updateReqDto.setMemberName("updateTesteName");
         updateReqDto.setDdd("010");
         updateReqDto.setTel1("1234");
@@ -219,7 +194,6 @@ class MemberControllerTest {
     void successUpdatePassword() throws Exception {
         // given
         MemberUpdatePasswordReqDto updateReqDto = new MemberUpdatePasswordReqDto();
-        updateReqDto.setMemberId("test0000");
         updateReqDto.setChangePassword("123456asdf");
 
         ObjectMapper om = new ObjectMapper();
@@ -240,27 +214,6 @@ class MemberControllerTest {
         resultActions.andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-    @Test
-    @DisplayName("비밀번호 변경 실패")
-    @WithUserDetails(value = "test0000", setupBefore = TestExecutionEvent.TEST_EXECUTION)
-    void unsuccessUpdatePassword() throws Exception {
-        // given
-        MemberUpdatePasswordReqDto updateReqDto = new MemberUpdatePasswordReqDto();
-        updateReqDto.setMemberId("test0001");
-        updateReqDto.setChangePassword("123456asdf");
-
-        ObjectMapper om = new ObjectMapper();
-        String requestBody = om.writeValueAsString(updateReqDto);
-
-        // when
-        ResultActions resultActions = mvc.perform(patch("/member")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody)
-        );
-
-        // then
-        resultActions.andExpect(MockMvcResultMatchers.status().isBadRequest());
-    }
 
     @Test
     @DisplayName("사용자 중복 확인 성공")

@@ -24,27 +24,28 @@ public class TodoTypeController {
 
     @GetMapping
     public ResponseEntity<?> searchTodoTypes(@AuthenticationPrincipal MemberDetails memberDetails) {
-        List<ToDoTypeRespDto> toDoTypeRespDtos = todoTypeService.searchTodoTypes(memberDetails.getMember());
+        List<ToDoTypeRespDto> toDoTypeRespDtos = todoTypeService.searchTodoTypes(memberDetails.getUsername());
         return new ResponseEntity<>(new ResponseDto<>(1, "Todo 타입을 조회하였습니다.", toDoTypeRespDtos), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<?> saveTodoType(@RequestBody @Valid TodoTypeSaveReqDto todoTypeSaveReqDto,
                                           @AuthenticationPrincipal MemberDetails memberDetails) {
-        ToDoTypeRespDto toDoTypeRespDto = todoTypeService.saveTodoType(todoTypeSaveReqDto);
+        ToDoTypeRespDto toDoTypeRespDto = todoTypeService.saveTodoType(todoTypeSaveReqDto, memberDetails.getUsername());
         return new ResponseEntity<>(new ResponseDto<>(1, "Todo 타입을 저장하였습니다.", toDoTypeRespDto), HttpStatus.CREATED);
     }
 
     @PatchMapping
-    public ResponseEntity<?> updateTodoType(@RequestBody @Valid TodoTypeUpdateReqDto todotypeUpdateReqDto) {
-        ToDoTypeRespDto toDoTypeRespDto = todoTypeService.updateTodoType(todotypeUpdateReqDto);
+    public ResponseEntity<?> updateTodoType(@RequestBody @Valid TodoTypeUpdateReqDto todotypeUpdateReqDto,
+                                            @AuthenticationPrincipal MemberDetails memberDetails) {
+        ToDoTypeRespDto toDoTypeRespDto = todoTypeService.updateTodoType(todotypeUpdateReqDto, memberDetails.getUsername());
         return new ResponseEntity<>(new ResponseDto<>(1, "Todo 타입을 변경하였습니다.", toDoTypeRespDto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{todoTypeId}")
     public ResponseEntity<?> deleteTodoType(@PathVariable Long todoTypeId,
                                             @AuthenticationPrincipal MemberDetails memberDetails) {
-        todoTypeService.deleteTodoType(todoTypeId, memberDetails.getMember());
+        todoTypeService.deleteTodoType(todoTypeId, memberDetails.getUsername());
         return new ResponseEntity<>(new ResponseDto<>(1, "Todo 타입이 삭제되었습니다."), HttpStatus.OK);
     }
 }

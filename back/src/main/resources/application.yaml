@@ -9,7 +9,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     show-sql: true
     properties:
       hibernate:
@@ -27,12 +27,6 @@ spring:
     secret: ${JWT_SECRET}
     accessTokenHeader: Authorization
     refreshTokenHeader: Refresh-Token
-
-logging:
-  level:
-    org.hibernate.SQL: DEBUG
-    org.hibernate.orm.jdbc.bind: TRACE
-    org.springframework.security: DEBUG
 
 cookie:
   secure: ${COOKIE_SECURE} #운영(HTTPS)에서는 true, 개발에서 false

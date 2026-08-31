@@ -26,16 +26,16 @@ public class TodoTypeServiceImpl implements TodoTypeService {
     private final MemberRepository memberRepository;
 
     @Override
-    public List<ToDoTypeRespDto> searchTodoTypes(Member member) {
-        return todoTypeRepository.findByMemberId(member.getMemberId())
+    public List<ToDoTypeRespDto> searchTodoTypes(String memberId) {
+        return todoTypeRepository.findByMemberId(memberId)
                 .stream()
                 .map(TodoType::toDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ToDoTypeRespDto saveTodoType(TodoTypeSaveReqDto todoTypeSaveReqDto) {
-        Member findMember = memberRepository.findByMemberIdAndRetired(todoTypeSaveReqDto.getMemberId(), false)
+    public ToDoTypeRespDto saveTodoType(TodoTypeSaveReqDto todoTypeSaveReqDto, String memberId) {
+        Member findMember = memberRepository.findByMemberIdAndRetired(memberId, false)
                 .orElseThrow(() -> new ApiException(ErrorCode.MEM_NOT_FOUND));
 
         return todoTypeRepository.save(TodoType.create(todoTypeSaveReqDto.getTodoTypeTitle(), findMember))
@@ -43,8 +43,8 @@ public class TodoTypeServiceImpl implements TodoTypeService {
     }
 
     @Override
-    public ToDoTypeRespDto updateTodoType(TodoTypeUpdateReqDto todotypeUpdateReqDto) {
-        Member findMember = memberRepository.findByMemberIdAndRetired(todotypeUpdateReqDto.getMemberId(), false)
+    public ToDoTypeRespDto updateTodoType(TodoTypeUpdateReqDto todotypeUpdateReqDto, String memberId) {
+        Member findMember = memberRepository.findByMemberIdAndRetired(memberId, false)
                 .orElseThrow(() -> new ApiException(ErrorCode.MEM_NOT_FOUND));
 
         TodoType findTodoType = todoTypeRepository.findByIdAndMember(todotypeUpdateReqDto.getTodoTypeId(), findMember)
@@ -56,8 +56,8 @@ public class TodoTypeServiceImpl implements TodoTypeService {
     }
 
     @Override
-    public void deleteTodoType(Long todoTypeId, Member member) {
-        Member findMember = memberRepository.findByMemberIdAndRetired(member.getMemberId(), false)
+    public void deleteTodoType(Long todoTypeId, String memberId) {
+        Member findMember = memberRepository.findByMemberIdAndRetired(memberId, false)
                 .orElseThrow(() -> new ApiException(ErrorCode.MEM_NOT_FOUND));
 
         TodoType findTodoType = todoTypeRepository.findByIdAndMember(todoTypeId, findMember)

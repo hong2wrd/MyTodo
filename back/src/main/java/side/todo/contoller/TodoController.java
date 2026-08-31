@@ -57,8 +57,7 @@ public class TodoController {
     }
 
     @GetMapping("/todoType/{todoTypeId}")
-    public ResponseEntity<?> searchTodos(@PathVariable String memberId,
-                                         @PathVariable(required = false) Long todoTypeId,
+    public ResponseEntity<?> searchTodos(@PathVariable(required = false) Long todoTypeId,
                                          @AuthenticationPrincipal MemberDetails memberDetails) {
         List<TodoRespDto> todoRespDtos = todoService.searchTodos(todoTypeId, memberDetails.getUsername());
         return new ResponseEntity<>(new ResponseDto<>(1, "Todo가 조회되었습니다.", todoRespDtos), HttpStatus.OK);

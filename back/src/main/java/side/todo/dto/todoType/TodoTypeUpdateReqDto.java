@@ -10,10 +10,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class TodoTypeUpdateReqDto {
-    @NotBlank(message = "사용자 Id를 확인해 주세요.")
-    @Pattern(regexp = "^[a-zA-Z0-9]{5,20}$", message = "사용자 Id를 확인해 주세요.")
-    private String memberId;
-
     @NotNull
     private Long todoTypeId;
 

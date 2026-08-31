@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface TodoTypeService {
 
-    List<ToDoTypeRespDto> searchTodoTypes(Member member);
+    List<ToDoTypeRespDto> searchTodoTypes(String memberId);
 
-    ToDoTypeRespDto saveTodoType(TodoTypeSaveReqDto todoTypeSaveReqDto);
+    ToDoTypeRespDto saveTodoType(TodoTypeSaveReqDto todoTypeSaveReqDto, String memberId);
 
-    ToDoTypeRespDto updateTodoType(TodoTypeUpdateReqDto todotypeUpdateReqDto);
+    ToDoTypeRespDto updateTodoType(TodoTypeUpdateReqDto todotypeUpdateReqDto, String memberId);
 
-    void deleteTodoType(Long todoTypeId, Member member);
+    void deleteTodoType(Long todoTypeId, String memberId);
 }

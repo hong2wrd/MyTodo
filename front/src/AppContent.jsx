@@ -3,7 +3,7 @@ import TodoList from "./pages/TodoList";
 import JoinPage from "./pages/Join";
 import LoginPage from "./pages/LoginPage";
 import New from "./pages/New";
-import TodoTypePage from "./pages/TodotypePage";
+import TodotypePage from "./pages/TodotypePage";
 import { useEffect } from "react";
 import { getToken } from "./hooks/useToken";
 import useLogin from "./hooks/useLogin";
@@ -26,7 +26,7 @@ function AppContent() {
             <Route path="/join" element={<JoinPage/>}/>
             <Route path="/login" element={<LoginPage/>}/>
             <Route path="/new" element={<New/>}/>
-            <Route path="/todoType" element={<TodoTypePage/>}/>
+            <Route path="/todoType" element={<TodotypePage/>}/>
             <Route path="/edit/:todoId" element={<Edit/>}/>
         </Routes>
     </>

@@ -38,7 +38,6 @@ const TodoType = () => {
                 if(todoTypes[index].id) {
                     // 수정
                     const response = await API.patch('/todoType', {
-                        memberId: info.memberId,
                         todoTypeId: todoTypes[index].id,
                         todoTypeTitle: todoTypes[index].title
                     });
@@ -48,7 +47,6 @@ const TodoType = () => {
                     }
                 } else {
                     const response = await API.post('/todoType', {
-                        memberId: info.memberId,
                         todoTypeTitle: todoTypes[index].title
                     });
                 
@@ -133,6 +131,7 @@ const TodoType = () => {
                         onChange={onChangeTitle}
                         index={i}
                         maxLength={10}
+                        key={`item_${i}`}
                     />
                     <div className="item_btn">
                         <button

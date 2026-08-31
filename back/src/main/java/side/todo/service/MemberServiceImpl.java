@@ -50,12 +50,12 @@ public class MemberServiceImpl implements MemberService {
 
     /**
      * 탈퇴
-     * @param retireReqDto
+     * @param memberId
      */
     @Override
-    public void retireMember(MemberRetireReqDto retireReqDto) {
+    public void retireMember(String memberId) {
 
-        Member findMember = memberRepository.findByMemberIdAndRetired(retireReqDto.getMemberId(), false)
+        Member findMember = memberRepository.findByMemberIdAndRetired(memberId, false)
                 .orElseThrow(() -> new ApiException(ErrorCode.MEM_NOT_FOUND));
 
         findMember.retire();
@@ -67,8 +67,8 @@ public class MemberServiceImpl implements MemberService {
      * @return
      */
     @Override
-    public MemberUpdateRespDto updateMember(MemberUpdateReqDto updateReqDto) {
-        Member findMember = memberRepository.findByMemberIdAndRetired(updateReqDto.getMemberId(), false)
+    public MemberUpdateRespDto updateMember(MemberUpdateReqDto updateReqDto, String memberId) {
+        Member findMember = memberRepository.findByMemberIdAndRetired(memberId, false)
                 .orElseThrow(() -> new ApiException(ErrorCode.MEM_NOT_FOUND));
 
         findMember.update(updateReqDto.getMemberName(), updateReqDto.getDdd(), updateReqDto.getTel1(), updateReqDto.getTel2());
@@ -83,13 +83,8 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public void updatePassword(MemberUpdatePasswordReqDto updatePasswordReqDto, Member member) {
-
-        if(!member.getMemberId().equals(updatePasswordReqDto.getMemberId())) {
-            throw new ApiException(ErrorCode.BAD_REQUEST);
-        }
-
-        Member findMember = memberRepository.findByMemberIdAndRetired(updatePasswordReqDto.getMemberId(), false)
+    public void updatePassword(MemberUpdatePasswordReqDto updatePasswordReqDto, String memberId) {
+        Member findMember = memberRepository.findByMemberIdAndRetired(memberId, false)
                 .orElseThrow(() -> new ApiException(ErrorCode.MEM_NOT_FOUND));
 
         String encryptPassword = passwordEncoder.encode(updatePasswordReqDto.getChangePassword());
@@ -97,11 +92,7 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public MemberSearchRespDto searchMember(String memberId, Member member) {
-        if(!memberId.equals(member.getMemberId())) {
-            throw new ApiException(ErrorCode.MEM_CONFIRM);
-        }
-
+    public MemberSearchRespDto searchMember(String memberId) {
         Member findMember = memberRepository.findByMemberIdAndRetired(memberId, false)
                 .orElseThrow(() -> new ApiException(ErrorCode.MEM_NOT_FOUND));
 

@@ -93,7 +93,6 @@ class TodoControllerTest {
     void successTodoSave2Test() throws Exception {
         // given
         TodoSaveReqDto todoSaveReqDto = new TodoSaveReqDto();
-        todoSaveReqDto.setMemberId("test0000");
         todoSaveReqDto.setTitle("test title");
         todoSaveReqDto.setContent("test content...");
         todoSaveReqDto.setTodoType(saveTodoType.getId());
@@ -120,7 +119,6 @@ class TodoControllerTest {
     void unsuccessTodoSave1Test() throws Exception {
         // given
         TodoSaveReqDto todoSaveReqDto = new TodoSaveReqDto();
-        todoSaveReqDto.setMemberId("test0000");
         todoSaveReqDto.setTitle("test title");
         todoSaveReqDto.setContent("test content...");
         todoSaveReqDto.setTodoType(null);
@@ -146,7 +144,6 @@ class TodoControllerTest {
     void unsuccessTodoSave2Test() throws Exception {
         // given
         TodoSaveReqDto todoSaveReqDto = new TodoSaveReqDto();
-        todoSaveReqDto.setMemberId("test0000");
         todoSaveReqDto.setTitle("test title");
         todoSaveReqDto.setContent("test content...");
         todoSaveReqDto.setTodoType(1000L);
@@ -172,7 +169,6 @@ class TodoControllerTest {
     void successTodoUpdateTest() throws Exception {
         // given
         TodoUpdateReqDto todoUpdateReqDto = new TodoUpdateReqDto();
-        todoUpdateReqDto.setMemberId("test0000");
         todoUpdateReqDto.setTodoId(todoId);
         todoUpdateReqDto.setTitle("afterTitle");
         todoUpdateReqDto.setContent("afterContent");
@@ -200,7 +196,6 @@ class TodoControllerTest {
     void unsuccessTodoUpdateTest() throws Exception {
         // given
         TodoUpdateReqDto todoUpdateReqDto = new TodoUpdateReqDto();
-        todoUpdateReqDto.setMemberId("test0000");
         todoUpdateReqDto.setTodoId(100L);
         todoUpdateReqDto.setTitle("afterTitle");
         todoUpdateReqDto.setContent("afterContent");
@@ -285,7 +280,7 @@ class TodoControllerTest {
         String memberId = "test0000";
 
         // when
-        ResultActions resultActions = mvc.perform(get("/todo/" + memberId + "/" + todoTypeId));
+        ResultActions resultActions = mvc.perform(get("/todo/" + todoTypeId));
 
         String responseBody = resultActions.andReturn().getResponse().getContentAsString();
         System.out.println("responseBody = " + responseBody);
