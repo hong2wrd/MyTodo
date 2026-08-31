@@ -1,12 +1,15 @@
-import './JoinForm.css';
+import './Form.css';
 import ButtonBox from './ButtonBox';
 
 import API from '../hooks/API';
-import { useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { TodoStatusContext } from '../App';
 
-const JoinForm = () => {
+const Form = ({ title, isUpdate}) => {
     const nav = useNavigate();
+
+    const {info} = useContext(TodoStatusContext);
     
     const [input, setInput] = useState({
         memberId : "",
@@ -21,7 +24,19 @@ const JoinForm = () => {
 
     const inputRef = useRef({});
 
-    const memberCoflictCheck = async () => {
+    useEffect(() => {
+        API.get("/member")
+        .then(res => {
+            const data = res.data.data;
+            console.log(data);
+            setInput({...data});
+        }).catch(e => {
+            console.log(e);
+        });
+
+    }, []);
+
+    const onClickMemberCoflictCheck = async () => {
 
         if(!input.memberId) {
             return;
@@ -44,7 +59,7 @@ const JoinForm = () => {
         );
     };
 
-    const memberJoinSubmit = async () => {
+        const memberJoin = async () => {
         if(!input.memberId) {
             window.alert("아이디를 입력해 주세요.");
             inputRef.current.memberId.focus();
@@ -75,18 +90,19 @@ const JoinForm = () => {
         }
         
         try {
-            const response = await API.post('/member', {
+            const requestBody = {
                 memberId : input.memberId,
                 password : input.password1,
                 memberName : input.memberName,
                 ddd : input.ddd,
                 tel1 : input.tel1,
                 tel2 : input.tel2,
-            });
+            }
+
+            const response = await API.post('/member', requestBody);
 
             const data = response.data;
 
-            console.log(data);
             window.alert(data.msg)
             nav("/");
             
@@ -96,9 +112,37 @@ const JoinForm = () => {
                 window.alert(data.msg);
             }
         }
-        
-        
     }
+
+    const memberUpdate = async () => {
+        try {
+            const requestBody = {
+                memberName : input.memberName,
+                ddd : input.ddd,
+                tel1 : input.tel1,
+                tel2 : input.tel2,
+            };
+
+            const response = await API.put('/member', requestBody);
+
+            if(response.status === 200) {
+                window.alert(response.data.msg)
+            }
+        } catch(e) {
+            window.alert('수정이 실패하였습니다.');
+        }
+
+    }
+
+    const memberJoinSubmit = () => {
+        if(isUpdate) {
+            memberUpdate();
+        } else {
+            memberJoin();
+        }
+       
+    };
+
     const onInputChange = (e) => {
         let name = e.target.name;
         let value = e.target.value;
@@ -119,10 +163,39 @@ const JoinForm = () => {
         return '';
     }
     
+    const onClickPassowrdChange = () => {
+        if(!input.password1 || !input.password2) {
+            window.alert("비밀번호를 입력해주세요.");
+            return;
+        }
+        if(input.password1 !== input.password2) {
+            window.alert("변경할 비밀번호를 확인해주세요.");
+            return;
+        }
+
+        API.patch('/member', {
+            changePassword :input.password1
+        })
+    }
+
+    const onClickRetire = async () => {
+        if(window.confirm("정말로 탈퇴하시겠습니까?")) {
+            try {
+                const response = await API.delete('/member');
+
+                if(response.status === 200) {
+                    window.alert(response.data.msg);
+                }
+
+            } catch(e) {
+                window.alert('탈퇴에 실패하였습니다.');
+            }
+        }
+    }
 
     return (
         <div className="Join">
-            <h2>가입하기</h2>
+            <h2>{title}</h2>
             <div className="content">
                 <p>아이디</p>
                 <input
@@ -130,12 +203,20 @@ const JoinForm = () => {
                     type={'text'}
                     name={'memberId'}
                     onChange={onInputChange}
+                    disabled={isUpdate}
+                    value={input.memberId}
                 />
-                <button onClick={memberCoflictCheck}>{'중복 확인'}</button>
-                <span className={`Span_${input.conflict ? "NEGATIVE" : "POSITIVE"}`}>
-                    { input.conflict === "" ? "" : (input.conflict ? "사용 불가능" : "사용 가능") }
-                </span>
-                
+                {
+                    isUpdate ? <>
+                        <button onClick={onClickRetire}>탈퇴하기</button>
+                    </> :
+                    <>
+                        <button onClick={onClickMemberCoflictCheck}>{'중복 확인'}</button>
+                        <span className={`Span_${input.conflict ? "NEGATIVE" : "POSITIVE"}`}>
+                            { input.conflict === "" ? "" : (input.conflict ? "사용 불가능" : "사용 가능") }
+                        </span>
+                    </>   
+                }
             </div>
             <div className="content">
                 <p>비밀번호</p>
@@ -149,6 +230,9 @@ const JoinForm = () => {
                     name={'password2'}
                     type={'password'}
                     onChange={onInputChange}/>
+                {
+                    isUpdate ? <button onClick={onClickPassowrdChange}>변경</button> : <></>
+                }
                 <span className={`Span_${checkPassword()}`}>
                     { checkPassword() ? (checkPassword() === 'POSITIVE' ? '비밀번호 일치' : '비밀번호 불일치') : "" }
                 </span>
@@ -159,6 +243,7 @@ const JoinForm = () => {
                     ref={(el) => inputRef.current.name = el}
                     name={'memberName'}
                     type={'text'}
+                    value={input.memberName}
                     onChange={onInputChange} />
             </div>
             <div className="content">
@@ -167,21 +252,24 @@ const JoinForm = () => {
                     ref={(el) => inputRef.current.ddd = el}
                     name={'ddd'}
                     type={'text'}
+                    value={input.ddd}
                     onChange={onInputChange} />
                 <input
                     ref={(el) => inputRef.current.tel1 = el}
                     name={'tel1'}
                     type={'text'}
+                    value={input.tel1}
                     onChange={onInputChange} />
                 <input
                     ref={(el) => inputRef.current.tel2 = el}
                     name={'tel2'}
                     type={'text'}
+                    value={input.tel2}
                     onChange={onInputChange} />
             </div>
-            <ButtonBox leftText={'가입하기'} leftOnClick={memberJoinSubmit} rightText={'돌아가기'} rightOnClick={() => nav(-1)}/>
+            <ButtonBox leftText={isUpdate ? '수정하기' : '가입하기'} leftOnClick={memberJoinSubmit} rightText={'돌아가기'} rightOnClick={() => nav(-1)}/>
         </div>
     );
 };
 
-export default JoinForm;
+export default Form;

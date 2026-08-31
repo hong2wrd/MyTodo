@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { getToken } from "./hooks/useToken";
 import useLogin from "./hooks/useLogin";
 import Edit from "./pages/Edit";
+import MyPage from "./pages/MyPage";
 
 function AppContent() {
 
@@ -28,6 +29,7 @@ function AppContent() {
             <Route path="/new" element={<New/>}/>
             <Route path="/todoType" element={<TodotypePage/>}/>
             <Route path="/edit/:todoId" element={<Edit/>}/>
+            <Route path="/myPage" element={<MyPage/>}/>
         </Routes>
     </>
 }

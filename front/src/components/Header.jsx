@@ -23,7 +23,7 @@ const Header = ({title}) => {
         </div>
         <div className='Header_cender'>{title}</div>
         <div className='Header_right'>
-            <span>
+            <span onClick={() => nav("/myPage")}>
             { `${info.memberName}${info.memberName ? "님" : ""}` }
             </span>
             <button onClick={loginOnClick}>

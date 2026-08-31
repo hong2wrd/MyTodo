@@ -1,11 +1,11 @@
-import JoinForm from '../components/JoinForm';
+import Form from '../components/Form';
 import useToken from '../hooks/useToken';
 
 const JoinPage = () => {
     useToken();
     return (
         <div>
-            <JoinForm/>
+            <Form title={'가입하기'} isUpdate={false}/>
         </div>
     );
 }
