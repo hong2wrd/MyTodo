@@ -31,3 +31,7 @@ spring:
 cookie:
   secure: ${COOKIE_SECURE} #운영(HTTPS)에서는 true, 개발에서 false
 
+batch:
+  member:
+    cron: ${MEMBER_BATCH_CRON:0 0 2 * * *}
+    zone: ${MEMBER_BATCH_ZONE:Asia/Seoul}

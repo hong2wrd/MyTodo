@@ -20,4 +20,11 @@ public interface TodoTypeRepository extends JpaRepository<TodoType, Long> {
           AND tt.member.memberId = :memberId
     """)
     List<TodoType> findByMemberId(@Param("memberId") String memberId);
+
+    @Query("""
+        SELECT tt
+        FROM TodoType tt
+        WHERE tt.member IN (:members)
+    """)
+    List<TodoType> findByMembers(@Param("members") List<Member> members);
 }

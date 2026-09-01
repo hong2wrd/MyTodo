@@ -1,9 +1,9 @@
 package side.todo.repository;
 
-import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import side.todo.domain.Member;
 import side.todo.domain.Todo;
 import side.todo.domain.TodoType;
@@ -39,4 +39,10 @@ public interface TodoRepository extends JpaRepository<Todo, Long> {
     @Modifying(clearAutomatically = true)
     @Query("DELETE FROM Todo t WHERE t.id IN :findTodoIds")
     void deleteTodo(@Param("findTodoIds") List<Long> findTodoIds);
+
+    @Query("""
+        SELECT t FROM Todo t
+        WHERE t.member in :members
+    """)
+    List<Todo> findByMembers(@Param("members") List<Member> members);
 }
