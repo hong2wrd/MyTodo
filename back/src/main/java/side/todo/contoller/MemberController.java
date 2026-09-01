@@ -1,7 +1,9 @@
 package side.todo.contoller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -9,7 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import side.todo.dto.ResponseDto;
 import side.todo.dto.member.*;
 import side.todo.security.MemberDetails;
+import side.todo.security.jwt.JwtProperties;
 import side.todo.service.MemberService;
+
+import static side.todo.util.ResponseUtil.removeCookie;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,6 +22,10 @@ import side.todo.service.MemberService;
 public class MemberController {
 
     private final MemberService memberService;
+    private final JwtProperties jwtProperties;
+
+    @Value("${cookie.secure}")
+    private boolean secure;
 
     @GetMapping
     public ResponseEntity<?> searchMember(@AuthenticationPrincipal MemberDetails memberDetails) {
@@ -37,8 +46,12 @@ public class MemberController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> retireMember(@AuthenticationPrincipal MemberDetails memberDetails) {
+    public ResponseEntity<?> retireMember(@AuthenticationPrincipal MemberDetails memberDetails,
+                                          HttpServletResponse response) {
         memberService.retireMember(memberDetails.getUsername());
+
+        removeCookie(response, jwtProperties, secure);
+
         return new ResponseEntity<>(new ResponseDto<>(1, "탈퇴가 완료되었습니다."), HttpStatus.OK);
     }
 
