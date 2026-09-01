@@ -112,6 +112,7 @@ const Editor = () => {
                         </option>
                     ))}
                 </select>
+                <button onClick={() => nav("/todoType")}>투두 타입 추가하기</button>
             </div>
             <div className="content">
                 <p>할일</p>
