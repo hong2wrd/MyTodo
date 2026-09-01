@@ -1,0 +1,37 @@
+spring:
+  profiles:
+    active: ${ACTIVE}
+  datasource:
+    url: jdbc:mysql://localhost:3306/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  redis:
+    host: localhost
+    port: 6379
+    password: ${REDIS_PASSWORD}
+
+  jwt:
+    prefix: "Bearer "
+    access-expiration-time: 1_800_000 # 30분
+    refresh-expiration-time: 604_800_000 # 7일
+    secret: ${JWT_SECRET}
+    accessTokenHeader: Authorization
+    refreshTokenHeader: Refresh-Token
+
+cookie:
+  secure: ${COOKIE_SECURE} #운영(HTTPS)에서는 true, 개발에서 false
+
+batch:
+  member:
+    cron: ${MEMBER_BATCH_CRON:0 0 2 * * *}
+    zone: ${MEMBER_BATCH_ZONE:Asia/Seoul}

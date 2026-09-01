@@ -1,0 +1,40 @@
+.Editor {
+    margin-top: 40px;
+}
+
+.Editor .content {
+    display: flex;
+    gap: 10px;
+}
+
+.Editor .content.btn {
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.Editor .content.btn > button {
+    width: 200px;
+    height: 50px;
+    font-size: 1.5rem;
+}
+
+.Editor .content > select {
+    width: 10%;
+    font-size: 1.2rem;
+}
+
+.Editor .content > input, textarea {
+    flex : 1;
+}
+
+.Editor .content > input {
+    padding-left: 5px;
+}
+
+.Editor .content > textarea {
+    height: 200px;
+    font-size: 1.5rem;
+    box-sizing: border-box;
+    resize: none;
+    padding: 10px;
+}

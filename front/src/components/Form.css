@@ -1,0 +1,56 @@
+.Join{
+    width: 80%;
+    height: 80%;
+    margin: 0 auto;
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.Join .content {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+}
+
+.Join .content > p {
+    width : 15%;
+}
+
+.Join .content > input {
+    width: 40%;
+}
+.Join .content > span {
+    font-size: 0.75em;
+}
+
+.Span_POSITIVE {
+    color: rgb(100, 201, 100);
+}
+
+.Span_NEGATIVE {
+    color: rgb(253, 86, 95);
+}
+
+
+.Join .content .InputBox {
+    width: 40%;
+}
+
+.Join .content > button {
+    margin : 10px 10px;
+    border-radius: 10px;
+}
+
+.Join .btn_box {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.Join .btn_box > button {
+    width: 30%;
+    border-radius: 10px;
+}

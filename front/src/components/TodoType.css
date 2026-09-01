@@ -1,0 +1,26 @@
+.TodoType {
+
+}
+
+.TodoType .top {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.TodoType .content {
+    margin-top: 20px;
+}
+
+.TodoType .content .item {
+    width: 60%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;   
+}
+
+.TodoType .content .item .item_btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px
+}
