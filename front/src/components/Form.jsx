@@ -5,6 +5,7 @@ import API from '../hooks/API';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TodoStatusContext } from '../App';
+import { removeToken } from '../hooks/useToken';
 
 const Form = ({ title, isUpdate}) => {
     const nav = useNavigate();
@@ -25,15 +26,15 @@ const Form = ({ title, isUpdate}) => {
     const inputRef = useRef({});
 
     useEffect(() => {
-        API.get("/member")
-        .then(res => {
-            const data = res.data.data;
-            console.log(data);
-            setInput({...data});
-        }).catch(e => {
-            console.log(e);
-        });
-
+        if(isUpdate) {
+            API.get("/member")
+            .then(res => {
+                const data = res.data.data;
+                setInput({...data});
+            }).catch(e => {
+                console.log(e);
+            });
+        }
     }, []);
 
     const onClickMemberCoflictCheck = async () => {
@@ -187,6 +188,10 @@ const Form = ({ title, isUpdate}) => {
                     window.alert(response.data.msg);
                 }
 
+                removeToken();
+
+                nav("/", {replace: true})
+
             } catch(e) {
                 window.alert('탈퇴에 실패하였습니다.');
             }
@@ -253,18 +258,21 @@ const Form = ({ title, isUpdate}) => {
                     name={'ddd'}
                     type={'text'}
                     value={input.ddd}
+                    maxLength={3}
                     onChange={onInputChange} />
                 <input
                     ref={(el) => inputRef.current.tel1 = el}
                     name={'tel1'}
                     type={'text'}
                     value={input.tel1}
+                    maxLength={4}
                     onChange={onInputChange} />
                 <input
                     ref={(el) => inputRef.current.tel2 = el}
                     name={'tel2'}
                     type={'text'}
                     value={input.tel2}
+                    maxLength={4}
                     onChange={onInputChange} />
             </div>
             <ButtonBox leftText={isUpdate ? '수정하기' : '가입하기'} leftOnClick={memberJoinSubmit} rightText={'돌아가기'} rightOnClick={() => nav(-1)}/>
